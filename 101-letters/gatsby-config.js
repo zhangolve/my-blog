@@ -13,18 +13,11 @@ module.exports = {
   // cp -r dir1/* dir2
 
   siteMetadata: {
-    title: `My Blog Title`,
-    author: `My Name`,
-    description: `My site description...`,
+    title: `101封信`,
+    author: `爱你的zxw`,
+    description: `写给宝贝的101封信`,
     social: [
-      {
-        name: `twitter`,
-        url: `https://twitter.com/gatsbyjs`,
-      },
-      {
-        name: `github`,
-        url: `https://github.com/gatsbyjs`,
-      },
+     
     ],
   },
 }
