@@ -37,6 +37,7 @@ jobs:
       run: |
         npm install gatsby-cli  -g
         gatsby new gatsby-blog https://github.com/gatsbyjs/gatsby-starter-blog-theme
+        npm install @mdx-js/mdx
 
     - name: Copy files
       run: |
