@@ -59,7 +59,7 @@ jobs:
         mkdir docs
         cp CNAME docs 
         cp -r gatsby-blog/public/* docs
-        cd ./docs && git init && git add .
+        git init && cd docs && git add .
         git config user.name "zhangolve.automation"
         git config user.email "zhangolve@gmail.com"
         git add .
