@@ -1,5 +1,5 @@
 import merge from "deepmerge"
-import defaultThemeColors from "@zhangolve/gatsby-theme-blog/src/gatsby-plugin-theme-ui/colors"
+import defaultThemeColors from "gatsby-theme-blog/src/gatsby-plugin-theme-ui/colors"
 
 /*
  * Want to change your theme colors?

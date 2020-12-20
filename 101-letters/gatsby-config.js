@@ -1,7 +1,7 @@
 module.exports = {
   plugins: [
     {
-      resolve: `@zhangolve/gatsby-theme-blog`,
+      resolve: `gatsby-theme-blog`,
       options: {
         contentPath: 'content/posts/101xin'
       },
