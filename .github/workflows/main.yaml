@@ -40,14 +40,13 @@ jobs:
 
     - name: Copy files
       run: |
-        cd ../
-        cp 101xin/*.md gatsby-blog/content/posts/* -r
+        cp 101xin/*.md gatsby-blog/content/posts/ -r
         cp 101xin/gatsby-config.js gatsby-blog
 
     - name: Build files
       run: |
         cd gatsby-blog
-        npm run build        
+        npm run build
 
     - name: Deploy hexo blog
       env: 
