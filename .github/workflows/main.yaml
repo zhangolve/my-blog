@@ -5,6 +5,8 @@ on:
   push:
     branches: 
       - master
+    paths:
+      - '101xin/**' 
 
 env:
   TZ: Asia/Shanghai
