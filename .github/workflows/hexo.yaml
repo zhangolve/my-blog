@@ -44,7 +44,7 @@ jobs:
         hexo init
         npm install hexo-deployer-git --save
         rm -rf source/_posts/*
-        cp ../hexo/* . -r
+        cp ../hexo/*.md . -r
         cp ../2020/*.md
         git clone https://github.com/theme-next/hexo-theme-next themes/next
         
