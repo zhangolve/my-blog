@@ -43,10 +43,13 @@ jobs:
         cd hexo-blog
         hexo init
         npm install hexo-deployer-git --save
+ 
+    - name: copy source and config
+    # 下载 hexo-cli 脚手架及相关安装包
+      run: |
         rm -rf source/_posts/*
         cp ../hexo/* . -r
         cp ../2020/  source/_posts/ -r
-        cp ../2021/ source/_posts/ -r
         git clone https://github.com/theme-next/hexo-theme-next themes/next
         
     - name: Generate files and deploy
