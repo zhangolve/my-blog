@@ -6,7 +6,8 @@ on:
     branches: 
       - master
     paths:
-      - '101xin/**' 
+      - '2020/**.md'
+      - '2021/**.md' 
 
 env:
   TZ: Asia/Shanghai
