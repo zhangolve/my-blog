@@ -59,8 +59,11 @@ jobs:
     - name: Generate files and deploy
       # 编译 markdown 文件
       run: |
-        git config user.name "zhangolve.automation"
-        git config user.email "zhangolve@gmail.com"
+        cd hexo-blog
         hexo clean
         hexo g
-        hexo d
+        cd ./public && git init && git add .
+        git config --global user.name "zhangolve.automation"
+        git config --global user.email "zhangolve@gmail.com"
+        git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
+        git push --force --quiet "https://${{ secrets.ACCESS_TOKEN }}@github.com/zhangolve/zhangolve.github.io" master:master
