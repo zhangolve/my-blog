@@ -53,8 +53,8 @@ jobs:
         cp ../2020/  source/_posts/ -r
         git clone https://github.com/theme-next/hexo-theme-next themes/next
 
-    - name: SSH connection to Actions
-      uses: P3TERX/ssh2actions@v1.0.0
+    # - name: SSH connection to Actions
+    #   uses: P3TERX/ssh2actions@v1.0.0
   
     - name: Generate files and deploy
       # 编译 markdown 文件
