@@ -51,6 +51,8 @@ jobs:
     - name: Generate files and deploy
       # 编译 markdown 文件
       run: |
+        git config user.name "zhangolve.automation"
+        git config user.email "zhangolve@gmail.com"
         hexo clean
         hexo g
         hexo d
