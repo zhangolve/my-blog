@@ -6,15 +6,14 @@ on:
     branches: 
       - master
     paths:
-      - '2020/**.md'
-      - '2021/**.md' 
+      - '101xin/**' 
 
 env:
   TZ: Asia/Shanghai
 
 jobs:
   blog-cicd:
-    name: Hexo blog build & deploy
+    name: gatsby blog 101 letters
     runs-on: ubuntu-latest # 使用最新的 Ubuntu 系统作为编译部署的环境
 
     steps:
