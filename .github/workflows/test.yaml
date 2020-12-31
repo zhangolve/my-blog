@@ -42,6 +42,9 @@ jobs:
     
 
     - name: Generate files and deploy
+      env: 
+        # Github 仓库
+        GITHUB_REPO: github.com/zhangolve/my-blog
     # 编译 markdown 文件
       run: |
         git init && git add .
