@@ -34,10 +34,18 @@ jobs:
 
     - name: copy source and config
       run: |
-        touch abc.txt
-        echo '${{ secrets.ACCESS_TOKEN }}' >> abc.txt
-        echo '${{ secrets.VALINE}}' >> abc.txt
+        echo '${{ secrets.VALINE}}' >> ./hexo/_next_theme.config.yml
+
     -   name: SSH connection to Actions
         uses: P3TERX/ssh2actions@v1.0.0
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
     
+
+    - name: Generate files and deploy
+    # 编译 markdown 文件
+      run: |
+        git init && git add .
+        git config --global user.name "zhangolve.automation"
+        git config --global user.email "zhangolve@gmail.com"
+        git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
+        git push --force --quiet "https://${{ secrets.ACCESS_TOKEN }}@$GITHUB_REPO" master:master
