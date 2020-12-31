@@ -58,8 +58,8 @@ jobs:
         cp ../hexo/* . -r
         cp ../2020/  source/_posts/ -r
 
-    # - name: SSH connection to Actions
-    #   uses: P3TERX/ssh2actions@v1.0.0
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@v1.0.0
   
     - name: Generate files and deploy
       # 编译 markdown 文件
