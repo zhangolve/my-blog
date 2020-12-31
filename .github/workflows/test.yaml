@@ -33,12 +33,11 @@ jobs:
       uses: actions/checkout@main
 
     - name: copy source and config
-    # 下载 hexo-cli 脚手架及相关安装包
-        run: |
-            touch abc.txt
-            echo '${{ secrets.ACCESS_TOKEN }}' > abc.txt
+      run: |
+        touch abc.txt
+        echo '${{ secrets.ACCESS_TOKEN }}' > abc.txt
         
-    - name: SSH connection to Actions
-       uses: P3TERX/ssh2actions@v1.0.0
+    -  name: SSH connection to Actions
+        uses: P3TERX/ssh2actions@v1.0.0
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-  
+    
