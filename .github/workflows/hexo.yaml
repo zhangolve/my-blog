@@ -46,8 +46,8 @@ jobs:
         npm install hexo-generator-feed --save
         npm install hexo-generator-sitemap --save
         git clone https://github.com/theme-next/hexo-theme-next themes/next
-        cp ../hexo/_next_theme_config.yaml themes/next/_config.yaml
-        echo '${{ secrets.VALINE}}' >> themes/next/_config.yaml
+        cp ../hexo/_next_theme_config.yml themes/next/_config.yml
+        echo '${{ secrets.VALINE}}' >> themes/next/_config.yml
 
  
     - name: copy source and config
