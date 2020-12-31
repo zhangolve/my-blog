@@ -1055,3 +1055,14 @@ vendors:
 css: css
 js: js
 images: images
+valine:
+  enable: true 
+  appid:  HfDBPvTz5vS7thoY9gHJFRYV-gzGzoHsz
+  appkey: WmbqlggY1zbg57bzcbjuYA8n
+  notify: false
+  verify: false
+  placeholder: anything
+  avatar: mm
+  guest_info: nick,mail,link
+  pageSize: 10
+  visitor: false 
