@@ -34,7 +34,7 @@ jobs:
 
     - name: copy source and config
       run: |
-        echo '${{ secrets.VALINE}}' >> ./hexo/_next_theme.config.yml
+        echo '${{ secrets.VALINE}}' >> ./hexo/_next_theme_config.yml
 
     -   name: SSH connection to Actions
         uses: P3TERX/ssh2actions@v1.0.0
