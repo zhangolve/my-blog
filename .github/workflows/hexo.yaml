@@ -65,6 +65,7 @@ jobs:
         rm -rf source/_posts/*
         cp ../hexo/* . -r
         cp ../2020/  source/_posts/ -r
+        cp ../2021/  source/_posts/ -r
 
 #- name: SSH connection to Actions
 # uses: P3TERX/ssh2actions@v1.0.0
