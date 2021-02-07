@@ -61,6 +61,31 @@ BREAKING CHANGE: No more changes should happen to Compilation.assets after seali
 TypeError: Cannot set property 'index' of undefined
 
 
+
+升级 MiniCssExtractPlugin
+
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+module.exports = {
+  plugins: [new MiniCssExtractPlugin()],
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+    ],
+  },
+};
+
+https://webpack.js.org/plugins/mini-css-extract-plugin/
+
+这些参数又都是什么意思呢？！！
+
+所有用到的
+
+
+
 This package has been deprecated
 Author message:
 
