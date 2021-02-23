@@ -111,3 +111,23 @@ npm WARN url-loader@2.0.1 requires a peer of webpack@^4.0.0 but none is installe
 
 这些warning信息需要调整
 
+
+https://www.npmjs.com/package/copy-webpack-plugin#transform
+
+升级了一些依赖。。相应地，也需要做一些调整。
+
+globOPtions
+
+ignore
+
+
+ Module build failed (from ./node_modules/sass-loader/dist/cjs.js):
+ValidationError: Invalid options object. Sass Loader has been initialized using an options object that does not match the API schema.
+ - options has an unknown property 'includePaths'. These properties are valid:
+   object { implementation?, sassOptions?, additionalData?, sourceMap?, webpackImporter? }
+    at validate (/home/zhangolve/github/fe-crisis-management/node_modules/webpack/node_modules/schema-utils/dist/validate.js:104:11)
+
+
+sass-loader 升级之后引起的
+
+
