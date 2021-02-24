@@ -130,4 +130,8 @@ ValidationError: Invalid options object. Sass Loader has been initialized using 
 
 sass-loader 升级之后引起的
 
+https://www.youtube.com/watch?v=rrMGUnBmjwQ
+
+loader 遇到了困难，看个视频了解下。
+
 
