@@ -134,4 +134,27 @@ https://www.youtube.com/watch?v=rrMGUnBmjwQ
 
 loader 遇到了困难，看个视频了解下。
 
+https://webpack.js.org/guides/asset-modules/
+
+
+不用file-loader了，有点麻烦。能少用一个loader 就少用一个。
+
+Asset Modules type replaces all of these loaders by adding 4 new module types:
+
+asset/resource emits a separate file and exports the URL. Previously achievable by using file-loader.
+asset/inline exports a data URI of the asset. Previously achievable by using url-loader.
+asset/source exports the source code of the asset. Previously achievable by using raw-loader.
+asset automatically chooses between exporting a data URI and emitting a separate file. Previously achievable by using url-loader with asset size limit.
+
+
+根据文件类型选择不同的loader
+
+js/ts 选择ts-loader 或者选择babel-loader会有很大的差别。选择ts-loader会更加严格
+css, scss , scss-loader, css-loader 对scss文件进行处理，解析，通过minicss 插件将css文件分离出来
+image, mp3, eot等资源文件， type='asset'进行处理
+
+
+
+
+
 
