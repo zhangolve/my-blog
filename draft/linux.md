@@ -38,3 +38,17 @@ Linux 修改本机时区
 比如jdk应用，时区为“Etc/UTC”，本机时间改为北京时间，通过java代码中new 出来的时间还是utc时间，所以必须得修正本机的时区。
 
 echo 'Asia/Shanghai' >/etc/timezone
+
+
+## wsl
+
+重启wsl ，在powershell 中执行
+
+```
+wsl.exe --shutdown
+```
+
+然后重新打开即可
+
+设置开启wsl的启动项
+
