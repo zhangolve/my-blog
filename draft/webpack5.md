@@ -267,4 +267,47 @@ StyledComponent.js:265 Uncaught Error: Element type is invalid: expected a strin
 
     这个错误，怀疑和之前start成功后报出的warning信息有关。
 
-    
+
+
+## Webpack 5 bug, works in 4] exported library in an empty object 
+
+But also have to change lots of props in devServer(when updating to "webpack-dev-server": "^4.0.0-beta.0") 😧 , likes before:
+
+before: async (app) => {
+==>
+
+onBeforeSetupMiddleware: async ({ app }) => {
+❤️ It works!
+
+# 可能是最后一个问题，一个port，多个server 入口的问题。
+
+
+https://github.com/webpack/webpack-cli/issues/2408
+
+
+Error: Unique ports must be specified for each devServer option in your webpack configuration. Alternatively, run only 1 devServer config using the --config-name flag to specify your desired config.
+
+
+
+
+let i = 0;
+export default getConfigs({
+    mode: 'development',
+    version: `${packageVersion}-${gitBranchName}`,
+}).map((modules) => {
+    i++;
+    const newServer = { ...devServer, port: devServer.port + i };
+    return ({ ...modules, devServer: newServer });
+});
+
+
+[webpack-dev-middleware] ConcurrentCompilationError: You ran Webpack twice. Each instance only supports a single concurrent compilation at a time.
+
+https://github.com/axios/axios/pull/3410
+
+Fixes vulnerability described in:
+
+https://snyk.io/vuln/SNYK-JS-AXIOS-1038255
+Closes: #3407
+Closes: #3369
+Uses a hook in follow-redirects to continue using the proxy if a redirect is encountered.
