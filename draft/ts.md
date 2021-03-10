@@ -16,3 +16,60 @@ We’ve now added a type variable T to the identity function. This T allows us t
 
 T可以是任意的type，这里的type是一个变量。例如，如果T是number的话，那么入参就是一个number[]， 我们也可以看到返回结果，是T或者undefined，这个也是正常的，也就是说，在上面这个例子中，输入的arr可以是一个空数组。
 
+
+## 2Newable
+Newable is just a special type of callable type annotation with the prefix new. It simply means that you need to invoke with new e.g.
+interface CallMeWithNewToGetString {
+  new(): string
+}
+
+// Usage
+declare const Foo: CallMeWithNewToGetString;
+const bar = new Foo(); // bar is inferred to be of type string
+
+
+3. assertion
+A common use case for type assertion is when you are porting over code from JavaScript to TypeScript. For example consider the following pattern:
+var foo = {};
+foo.bar = 123; // Error: property 'bar' does not exist on `{}`
+foo.bas = 'hello'; // Error: property 'bas' does not exist on `{}`
+Here the code errors because the inferred type of foo is {} i.e. an object with zero properties. Therefore you are not allowed to add bar or bas to it. You can fix this simply by a type assertion as Foo:
+interface Foo {
+    bar: number;
+    bas: string;
+}
+var foo = {} as Foo;
+foo.bar = 123;
+foo.bas = 'hello';
+
+## 4. Readonly
+Difference from const
+const
+is for a variable reference
+the variable cannot be reassigned to anything else.
+readonly is
+for a property
+the property can be modified because of aliasing
+
+## 5. never
+
+The never type is used in TypeScript to denote this bottom type. Cases when it occurs naturally:
+A function never returns (e.g. if the function body has while(true){})
+A function always throws (e.g. in function foo(){throw new Error('Not Implemented')} the return type of foo is never)
+
+比较一下never 和 void呢？？！
+
+## 6. Discriminated Union
+
+
+interface Square {
+    kind: "square";
+    size: number;
+}
+
+interface Rectangle {
+    kind: "rectangle";
+    width: number;
+    height: number;
+}
+type Shape = Square | Rectangle;2
