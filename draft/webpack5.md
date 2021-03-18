@@ -318,3 +318,53 @@ Uses a hook in follow-redirects to continue using the proxy if a redirect is enc
 
 样式错乱
 
+https://stackoverflow.com/questions/50416293/webpack-minicssextractplugin-doesnt-extract-file
+
+
+怀疑跟sideEffects有关系。。
+
+k可以了解一下乾坤
+
+output.chunkLoadingGlobal
+string = 'webpackChunkwebpack'
+
+The global variable used by webpack for loading of chunks.
+
+webpack.config.js
+
+module.exports = {
+  //...
+  output: {
+    //...
+    chunkLoadingGlobal: 'myCustomFunc',
+  },
+};
+output.chunkLoading
+false string: 'jsonp' | 'import-scripts' | 'require' | 'async-node' | <any string>
+
+The method to load chunks (methods included by default are 'jsonp' (web), 'importScripts' (WebWorker), 'require' (sync node.js), 'async-node' (async node.js), but others might be added by plugins).
+
+webpack.config.js
+
+module.exports = {
+  //...
+  output: {
+    //...
+    chunkLoading: 'async-node',
+  },
+};
+
+2. 配置微应用的打包工具
+除了代码中暴露出相应的生命周期钩子之外，为了让主应用能正确识别微应用暴露出来的一些信息，微应用的打包工具需要增加如下配置：
+
+webpack:
+const packageName = require('./package.json').name;
+
+module.exports = {
+  output: {
+    library: `${packageName}-[name]`,
+    libraryTarget: 'umd',
+    jsonpFunction: `webpackJsonp_${packageName}`,
+  },
+};
+相关配置介绍可以查看 webpack 相关文档。
