@@ -17,6 +17,8 @@ https://www.bilibili.com/video/BV1qr4y1T7jk/
  《天涯明月刀》  https://www.bilibili.com/video/bv1KX4y1V75a
 
 《无证之罪》 https://www.bilibili.com/video/bv1rA411K7cb
+《天涯明月刀》 https://www.bilibili.com/video/BV1KX4y1V75a/
+《飞刀又见飞刀》 https://www.bilibili.com/video/BV1L5411K7BM/
 
 网络小说有声书：
 
@@ -26,3 +28,4 @@ https://www.bilibili.com/video/BV1xA411x76r/
 https://www.bilibili.com/video/BV12z4y1f7fV/
 《十宗罪》 https://www.bilibili.com/video/BV1Xk4y1m7Kn/
 《超级惊悚直播》 https://www.bilibili.com/video/BV1LK411p7kC
+《万古第一神》 https://www.bilibili.com/video/BV1HA411N7nz/
