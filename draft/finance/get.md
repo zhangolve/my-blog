@@ -31,3 +31,15 @@ transferwise开户
 总结
 在美股玩的这段时间，套路学了不少，学了不少金融知识，果然要自己花钱才学的到哈哈哈哈哈哈哈哈，总结就是，可以玩，但是不要多，毕竟，玩不起，稍微玩玩学下就好。
 
+
+If you’re sending money from your account to a bank account outside of Wise, we charge a fixed fee. We’ll also charge a conversion fee if you send money to a different currency.
+
+To check how much the fee is, use our pricing page . Just type in the amount you want to send, and choose the currency you’re sending from and to. We’ll show you the exact fee you’ll need to pay. 
+
+1.05USD
+How the fee is calculated
+1.05 USDfixed fee
+0 USD(0%)variable fee
+1.05 USDtotal fee
+
+无论发送多少钱，都是1.05美元。由于是美国银行之间的转装，也没有中间行费用。
