@@ -43,3 +43,8 @@ How the fee is calculated
 1.05 USDtotal fee
 
 无论发送多少钱，都是1.05美元。由于是美国银行之间的转装，也没有中间行费用。
+
+Community Federal Savings Bank
+
+对应的银行
+
