@@ -10,7 +10,7 @@ on:
     paths:
       - '2020/**.md'
       - '2021/**.md' 
-      - 'hexo'
+      - 'hexo/*'
 
 env:
   TZ: Asia/Shanghai
