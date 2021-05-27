@@ -124,7 +124,31 @@ https://stackoverflow.com/questions/59000007/standard-init-linux-go207-exec-user
 
 # 使用watchtower 自动更新container
 
+
+https://containrrr.dev/watchtower/arguments/#poll_interval
+
+
 docker run --restart always -d \
     --name watchtower \
     -v /var/run/docker.sock:/var/run/docker.sock \
     containrrr/watchtower
+
+
+```
+Scheduling¶
+Cron expression in 6 fields (rather than the traditional 5) which defines when and how often to check for new images. Either --interval or the schedule expression can be defined, but not both. An example: --schedule "0 0 4 * * *"
+
+Argument: --schedule, -s
+Environment Variable: WATCHTOWER_SCHEDULE
+Type: String
+Default: -
+
+
+Poll interval¶
+Poll interval (in seconds). This value controls how frequently watchtower will poll for new images. Either --schedule or a poll interval can be defined, but not both.
+
+Argument: --interval, -i
+Environment Variable: WATCHTOWER_POLL_INTERVAL
+Type: Integer
+Default: 86400 (24 hours)
+```
