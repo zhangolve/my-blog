@@ -128,8 +128,8 @@ https://stackoverflow.com/questions/59000007/standard-init-linux-go207-exec-user
 https://containrrr.dev/watchtower/arguments/#poll_interval
 
 
-docker run --restart always -d \
-    --name watchtower \
+docker run --run-once -d \
+    --name watchtower2  \
     -v /var/run/docker.sock:/var/run/docker.sock \
     containrrr/watchtower
 
@@ -152,3 +152,14 @@ Environment Variable: WATCHTOWER_POLL_INTERVAL
 Type: Integer
 Default: 86400 (24 hours)
 ```
+
+
+如果想要立刻更新某个容器，可以使用：
+
+```
+docker run --rm \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    containrrr/watchtower \
+    --run-once \
+```
+
