@@ -39,14 +39,16 @@ jobs:
         #比较当前这个目录有没有变化
       # 下载 hexo-cli 脚手架及相关安装包
       run: |
-        npm install gatsby-cli  -g
+        npm install gatsby-cli@4.2.0  -g
         gatsby new gatsby-blog https://github.com/gatsbyjs/gatsby-starter-blog-theme
-        npm install @mdx-js/mdx
+        npm install @mdx-js/mdx@1.6.22
 
     - name: Copy files
       run: |
         rm -rf gatsby-blog/content/posts/*
         cp 101xin/*.md gatsby-blog/content/posts/ -r
+        cp 101xin/avatar.png gatsby-blog/content/assets/avatar.png
+        cp 101xin/src/* gatsby-blog/src -r
         cp 101xin/gatsby-config.js gatsby-blog
 
     - name: Build files
