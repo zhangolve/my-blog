@@ -40,11 +40,11 @@ jobs:
         npm install gatsby-cli@4.2.0  -g
         mkdir gatsby-blog
         cp 101xin/*  gatsby-blog/  -r
-        npm i
 
     - name: Build files
       run: |
         cd gatsby-blog
+        npm install
         npm run build
 
     - name: Deploy hexo blog
