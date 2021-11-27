@@ -45,11 +45,9 @@ jobs:
 
     - name: Copy files
       run: |
-        rm -rf gatsby-blog/content/posts/*
-        cp 101xin/*.md gatsby-blog/content/posts/ -r
-        cp 101xin/avatar.png gatsby-blog/content/assets/avatar.png
-        cp 101xin/src/* gatsby-blog/src -r
-        cp 101xin/gatsby-config.js gatsby-blog
+        mkdir gatsby-blog
+        cp 101xin/*  gatsby-blog/  -r
+        npm i
 
     - name: Build files
       run: |
