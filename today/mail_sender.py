@@ -10,18 +10,20 @@ from email.mime.multipart import MIMEMultipart
 
 class MailSender(object):
 
-	def __init__(self,my_sender,my_pass,sender_name,receiver_addr,subject,content, attachment):
+	def __init__(self,my_sender,my_pass,sender_name,receiver_addr,subject,content, html, attachment):
 		self.my_sender=my_sender
 		self.my_pass=my_pass#口令，不是密码，通常为16位字符串
 		self.sender_name=sender_name
 		self.receiver_addr=receiver_addr
 		self.subject=subject
 		self.content=content
+		self.html=html
 		self.attachment=attachment
 		
 	def send_it(self):
 		msg = MIMEMultipart()
 		msg.attach(MIMEText(self.content,'plain','utf-8',))
+		msg.attach(MIMEText(self.html,'html','utf-8',))
 		msg['From']=formataddr([self.sender_name,self.my_sender])
 		msg['to']='管理员'  
 		msg['Subject']=self.subject

@@ -1,6 +1,7 @@
 from pathlib import Path
 from datetime import date
 from mail_sender import MailSender
+from weibo import get_weibo_contents
 
 today = date.today()
 d1 = today.strftime("-%m-%d")
@@ -27,9 +28,10 @@ for path in working_dir.glob("../**/*.md"):
         if d1 in content:            
             contents.append(content)
 contents = '\n\n\n'.join(contents)
+html= get_weibo_contents()
+
 if not contents:
     contents = 'there is no history blog'
 
-
-mailsender=MailSender(my_sender, my_pass, sender_name, receiver_addr, subject, contents, None)
+mailsender=MailSender(my_sender, my_pass, sender_name, receiver_addr, subject, contents, html, None)
 mailsender.send_it()
