@@ -1,3 +1,9 @@
+title: 关于SNH48
+date: 2015-07-26 11:06:08
+categories: 简述
+  --- 
+
+
 ![图片来自鞠婧青韦微博](http://7ktu2f.com1.z0.glb.clouddn.com/jujingyi.jpg)
 
 

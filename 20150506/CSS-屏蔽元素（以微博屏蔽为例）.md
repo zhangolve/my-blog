@@ -1,3 +1,9 @@
+title: CSS-屏蔽元素（以微博屏蔽为例）
+date: 2015-06-24 09:24:57
+categories: 简述
+  --- 
+
+
 #工具
 
 你需要PC机，firefox浏览器，stylish扩展

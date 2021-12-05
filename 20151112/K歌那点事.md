@@ -1,3 +1,9 @@
+title: K歌那点事
+date: 2015-11-30 21:18:16
+categories: 简述
+  --- 
+
+
 ![KTV那点事 图片来自网络](http://upload-images.jianshu.io/upload_images/48180-c500b06e0003d2d1.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 

@@ -1,3 +1,9 @@
+title: 【Quora第一答】Quora被墙了吗？
+date: 2015-07-02 08:14:34
+categories: 简述
+  --- 
+
+
 #前情提示
 我大概13年下半年就注册了Quora，原因嘛，则是因为玩某乎，某乎上又有一群人在嚷嚷着Quora有多好。但是直到2014年初，我才在Quora上面提出了第一个问题:[Does Google follow "don't be evil," as it said?](https://www.quora.com/Does-Google-follow-dont-be-evil-as-it-said) ,而事实上,现在的这个题目也早就不是我最初的那个题目了,因为题目表述不明被其他人修改过了.
 
