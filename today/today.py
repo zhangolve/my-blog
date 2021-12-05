@@ -23,7 +23,7 @@ for path in working_dir.glob("../**/*.md"):
     md_blogs = []
     txt_blogs = []
     weibo = []
-    with open(path.absolute()) as f:
+    with open(path.absolute(), encoding="utf-8") as f:
         content = f.read()
         if d1 in content:            
             contents.append(content)
