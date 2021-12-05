@@ -23,6 +23,6 @@ jobs:
         architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
 
     - run: |
-        pip install --no-cache-dir -rt today/requirements.txt
         cd today
+        pip install --no-cache-dir -rt requirements.txt
         python today.py
