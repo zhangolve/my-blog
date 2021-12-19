@@ -1,3 +1,9 @@
+title: Chrome浏览器下使用SwitchyOmega配合SSR客户端代理问题
+date: 2016-05-28 19:15:14
+categories: 简述
+  --- 
+
+
 # 问题来源
 
 在过去的一年多的时间里，在科学上网方面，在PC端我的方法一直是使用Firefox(or Chrome)+插件+SS客户端

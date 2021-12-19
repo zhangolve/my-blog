@@ -1,3 +1,9 @@
+title: React开发实践6--详细说说滚动记忆
+date: 2018-12-25 16:52:16
+categories: 简述
+  --- 
+
+
 # 需求
 我们的APP是一个电商hybrid APP！APP的几乎所有呈现部分，都由前端来完成。
 

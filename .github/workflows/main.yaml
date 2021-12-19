@@ -35,23 +35,16 @@ jobs:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
-    - name: gatsby init 
-        #比较当前这个目录有没有变化
-      # 下载 hexo-cli 脚手架及相关安装包
-      run: |
-        npm install gatsby-cli  -g
-        gatsby new gatsby-blog https://github.com/gatsbyjs/gatsby-starter-blog-theme
-        npm install @mdx-js/mdx
-
     - name: Copy files
       run: |
-        rm -rf gatsby-blog/content/posts/*
-        cp 101xin/*.md gatsby-blog/content/posts/ -r
-        cp 101xin/gatsby-config.js gatsby-blog
+        npm install gatsby-cli@4.2.0  -g
+        mkdir gatsby-blog
+        cp 101xin/*  gatsby-blog/  -r
 
     - name: Build files
       run: |
         cd gatsby-blog
+        npm install
         npm run build
 
     - name: Deploy hexo blog
