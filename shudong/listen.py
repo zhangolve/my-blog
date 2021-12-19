@@ -22,7 +22,7 @@ import logging
 from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 import leancloud
-
+from fire import upload_blob
 leancloud.init("rkX7RdhzjQ0DdnpkcffRn4TD-gzGzoHsz", "pbWq8UDhvWbRpjebqfhqj4pG")
 
 Shudong = leancloud.Object.extend('shudong')
@@ -44,6 +44,19 @@ def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_markdown_v2(
         fr'Hi {user.mention_markdown_v2()}\!',
         reply_markup=ForceReply(selective=True),
+    )
+
+
+def upload_photo(update: Update, context: CallbackContext) -> int:
+    """Stores the photo and asks for a location."""
+    user = update.message.from_user
+    photo_file = update.message.photo[-1].get_file()
+    file_unique_id = photo_file['file_unique_id']
+    file_name = '{}.jpg'.format(file_unique_id)
+    photo_file.download(file_name)
+    upload_blob('./{}'.format(file_name), file_name)
+    update.message.reply_text(
+        'photo uploaded'
     )
 
 
@@ -75,7 +88,7 @@ def main() -> None:
 
     # on non command i.e message - echo the message on Telegram
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
-
+    dispatcher.add_handler(MessageHandler(Filters.photo & ~Filters.command, upload_photo))
     # Start the Bot
     updater.start_polling()
 
