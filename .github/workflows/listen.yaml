@@ -28,7 +28,7 @@ jobs:
 
     - run: | 
         pip install --no-cache-dir -r shudong/requirements.txt
+        cd shudong
         echo '${{ secrets.GOOGLE_AUTH}}' >> ./auth2.json
         cat ./auth2.json
-        cd shudong
         python listen.py
