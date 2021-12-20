@@ -88,6 +88,7 @@ def search_text(update: Update, context: CallbackContext):
     else:
         reply_content = '没有找到相关内容'
     update.message.reply_text(reply_content)
+    return ConversationHandler.END
 
 
 def cancel(update: Update, context: CallbackContext) -> int:
@@ -113,9 +114,6 @@ def main() -> None:
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("help", help_command))
 
-    # on non command i.e message - echo the message on Telegram
-    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
-    dispatcher.add_handler(MessageHandler(Filters.photo & ~Filters.command, upload_photo))
         
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('search', could_search)],
@@ -126,6 +124,10 @@ def main() -> None:
     )
     dispatcher.add_handler(conv_handler)    
 
+    # on non command i.e message - echo the message on Telegram
+    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+    dispatcher.add_handler(MessageHandler(Filters.photo & ~Filters.command, upload_photo))
+    
     # Start the Bot
     updater.start_polling()
 
