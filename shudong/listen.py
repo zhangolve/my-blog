@@ -20,7 +20,7 @@ bot.
 import logging
 
 from telegram import Update, ForceReply
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext,ConversationHandler
 import leancloud
 from fire import upload_blob
 from search import search
