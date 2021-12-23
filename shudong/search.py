@@ -29,7 +29,7 @@ def search_in_tweet(text):
 
 def search(text):
     result = []
-    result.extend(search_in_shudong(text))
     result.extend(search_in_tweet(text))
+    result.extend(search_in_shudong(text))
     return result
 
