@@ -37,7 +37,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 THREAD_ARR = []
-
+PHOTOS = []
 # Define a few command handlers. These usually take the two arguments update and
 # context.
 def start(update: Update, context: CallbackContext) -> None:
@@ -50,9 +50,10 @@ def start(update: Update, context: CallbackContext) -> None:
 
 
 
-def write_single_shudong(text):
+def write_single_shudong(text, photos):
     shudong = Shudong()
     shudong.set('content', text)
+    shudong.set('photos', photos)
     shudong.save()
 
 
@@ -70,7 +71,7 @@ def upload_photo(update: Update, context: CallbackContext) -> int:
     photo_file = update.message.photo[-1].get_file()
     url = upload_single_photo(photo_file)
     shudong = caption + '\n' + url
-    write_single_shudong(shudong)
+    write_single_shudong(shudong, [url])
     update.message.reply_text(shudong)
     update.message.reply_text(
         'photo uploaded'
@@ -110,8 +111,10 @@ def search_text(update: Update, context: CallbackContext):
 # thread logic
 
 def could_thread(update: Update, context: CallbackContext):
-    global THREAD_ARR 
+    global THREAD_ARR
+    global PHOTOS 
     THREAD_ARR = []
+    PHOTOS = []
     update.message.reply_text('请开始你的表演')
     return 0
 
@@ -122,7 +125,7 @@ def tell_thread(update: Update, context: CallbackContext):
     if update.message.photo:
         photo_file = update.message.photo[-1].get_file()
         url = upload_single_photo(photo_file)
-        THREAD_ARR.append(url)
+        PHOTOS.append(url)
     update.message.reply_text('请继续你的表演')
     return 0
 
@@ -130,10 +133,12 @@ def tell_thread(update: Update, context: CallbackContext):
 def thread_create(update: Update, context: CallbackContext):
     print('create')
     global THREAD_ARR 
-    shudong = '\n'.join(THREAD_ARR)
-    write_single_shudong(shudong)
+    global PHOTOS
+    shudong = '\n'.join(THREAD_ARR) + '\n' + '\n'.join(PHOTOS)
+    write_single_shudong(shudong, PHOTOS)
     update.message.reply_text('preview shudong:'+ shudong)
     THREAD_ARR= []
+    PHOTOS = []
     return ConversationHandler.END
 
 
@@ -151,9 +156,9 @@ def cancel(update: Update, context: CallbackContext) -> int:
 def main() -> None:
     """Start the bot."""
     # Create the Updater and pass it your bot's token.
-    updater = Updater("5065608320:AAHV4EkYAW9mFRK6QwWtAonI8nZ83LVeQSI")
+    # updater = Updater("5065608320:AAHV4EkYAW9mFRK6QwWtAonI8nZ83LVeQSI")
     # dev bot
-    # updater = Updater("5064508364:AAEfTF9IlNUwIrEaL3VPWn0WsQsgb4bhzNA")
+    updater = Updater("5064508364:AAEfTF9IlNUwIrEaL3VPWn0WsQsgb4bhzNA")
 
     # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
