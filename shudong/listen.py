@@ -18,6 +18,7 @@ bot.
 """
 
 import logging
+import os
 
 from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext,ConversationHandler
@@ -156,10 +157,12 @@ def cancel(update: Update, context: CallbackContext) -> int:
 def main() -> None:
     """Start the bot."""
     # Create the Updater and pass it your bot's token.
-    # updater = Updater("5065608320:AAHV4EkYAW9mFRK6QwWtAonI8nZ83LVeQSI")
-    # dev bot
-    updater = Updater("5064508364:AAEfTF9IlNUwIrEaL3VPWn0WsQsgb4bhzNA")
-
+    if os.environ.get('USER') == 'zhangolive':
+        # dev bot
+        updater = Updater("5064508364:AAEfTF9IlNUwIrEaL3VPWn0WsQsgb4bhzNA")
+    else:
+        updater = Updater("5065608320:AAHV4EkYAW9mFRK6QwWtAonI8nZ83LVeQSI")
+   
     # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
 
