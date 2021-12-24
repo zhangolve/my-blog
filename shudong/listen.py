@@ -51,10 +51,11 @@ def start(update: Update, context: CallbackContext) -> None:
 
 
 
-def write_single_shudong(text, photos):
+def write_single_shudong(text, photos=None):
     shudong = Shudong()
     shudong.set('content', text)
-    shudong.set('photos', photos)
+    if photos:
+        shudong.set('photos', photos)
     shudong.save()
 
 
