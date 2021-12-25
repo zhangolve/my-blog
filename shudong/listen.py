@@ -21,10 +21,10 @@ import logging
 import os
 
 from telegram import Update, ForceReply
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext,ConversationHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext,ConversationHandler, CallbackQueryHandler
 import leancloud
 from fire import upload_blob
-from search import search
+from search import search, search_button, search_text, could_search
 leancloud.init("rkX7RdhzjQ0DdnpkcffRn4TD-gzGzoHsz", "pbWq8UDhvWbRpjebqfhqj4pG")
 
 Shudong = leancloud.Object.extend('shudong')
@@ -39,6 +39,7 @@ logger = logging.getLogger(__name__)
 
 THREAD_ARR = []
 PHOTOS = []
+
 # Define a few command handlers. These usually take the two arguments update and
 # context.
 def start(update: Update, context: CallbackContext) -> None:
@@ -93,21 +94,6 @@ def write_shudong(update: Update, context: CallbackContext) -> None:
     update.message.reply_text('content saved')
 
 
-def could_search(update: Update, context: CallbackContext):
-    update.message.reply_text('清输入搜索内容')
-    return 0
-
-
-def search_text(update: Update, context: CallbackContext):
-    tweet_list = search(update.message.text)
-    reply_content = ''
-    if tweet_list:
-        for tweet in tweet_list:
-            reply_content = reply_content + f'{tweet["tweet"]["full_text"]}\n' + f'{tweet["tweet"]["created_at"]}\n'
-    else:
-        reply_content = '没有找到相关内容'
-    update.message.reply_text(reply_content)
-    return ConversationHandler.END
 
 
 # thread logic
@@ -196,6 +182,7 @@ def main() -> None:
     # on non command i.e message - write_shudong the message on Telegram
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, write_shudong))
     dispatcher.add_handler(MessageHandler(Filters.photo & ~Filters.command, upload_photo))
+    dispatcher.add_handler(CallbackQueryHandler(search_button))
     
     # Start the Bot
     updater.start_polling()
