@@ -145,7 +145,7 @@ def cancel(update: Update, context: CallbackContext) -> int:
 
 
 def get_token():
-    with open('token.txt') as fp:
+    with open('./token.txt') as fp:
     # fp as a string
         return fp.read()
 
