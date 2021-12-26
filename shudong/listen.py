@@ -153,7 +153,7 @@ def get_token():
 def main() -> None:
     """Start the bot."""
     token = get_token()
-
+    print(token,'888')
     updater = Updater(token)
 
     # Get the dispatcher to register handlers
