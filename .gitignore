@@ -1,1 +1,7 @@
 node_modules
+shudong/data.json
+shudong/token.txt
+shudong/tweet.js
+shudong/data.js
+shudong/__pycache__
+shudong/auth2.json

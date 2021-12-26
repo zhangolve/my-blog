@@ -41,6 +41,7 @@ jobs:
         cd ../
         pip install --no-cache-dir -r shudong/requirements.txt
         cd shudong
+        echo '${{ secrets.TELEGRAM_TOKEN}}' >> ./token.txt
         echo '${{ secrets.GOOGLE_AUTH}}' >> ./auth2.json
         cat ./auth2.json
         python listen.py
