@@ -27,7 +27,10 @@ from fire import upload_blob
 from search import search, search_button, search_text, could_search
 leancloud.init("rkX7RdhzjQ0DdnpkcffRn4TD-gzGzoHsz", "pbWq8UDhvWbRpjebqfhqj4pG")
 
-Shudong = leancloud.Object.extend('shudong')
+if os.environ.get('USER') == 'zhangolive':
+    Shudong = leancloud.Object.extend('shudong_test')
+else:
+    Shudong = leancloud.Object.extend('shudong')
 
 
 # Enable logging
