@@ -144,16 +144,8 @@ def cancel(update: Update, context: CallbackContext) -> int:
     return ConversationHandler.END
 
 
-def get_token():
-    with open('./token.txt') as fp:
-    # fp as a string
-        return fp.read()
-
-
-def main() -> None:
+def main(token) -> None:
     """Start the bot."""
-    token = get_token()
-    print(token,'888')
     updater = Updater(token)
 
     # Get the dispatcher to register handlers
@@ -199,5 +191,11 @@ def main() -> None:
     updater.idle()
 
 
+
+def init():
+    with open('./token.txt', 'r') as fp:
+        token = fp.read().rstrip("\n")
+        main(token)
+
 if __name__ == '__main__':
-    main()
+    init()
