@@ -38,7 +38,9 @@ jobs:
         cd shudong_data
         git checkout master
         git sparse-checkout set leancloud
-        cp -r leancloud/* ../shudong
+        cp leancloud/data.json ../shudong/data.json
+        cp leancloud/tweet.js ../shudong/tweet.js
+        cp leancloud/data.js ../shudong/data.js
     - name: listen
       run: | 
         pip install --no-cache-dir -r shudong/requirements.txt
