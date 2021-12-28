@@ -29,7 +29,7 @@ jobs:
         architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
         cache: 'pip'
         cache-dependency-path: 'shudong/requirements.txt'
-    - name: listen
+    - name: prepare data
       env: 
         # Github 仓库
         GITHUB_REPO: github.com/hktkdy/shudong
@@ -38,10 +38,11 @@ jobs:
         cd shudong_data
         git checkout master
         git sparse-checkout set leancloud
-        cd ../
+        cp -r leancloud/* ../shudong
+    - name: listen
+      run: | 
         pip install --no-cache-dir -r shudong/requirements.txt
         cd shudong
         echo '${{ secrets.TELEGRAM_TOKEN}}' >> ./token.txt
         echo '${{ secrets.GOOGLE_AUTH}}' >> ./auth2.json
-        cat ./auth2.json
         python listen.py

@@ -20,7 +20,7 @@ bot.
 import logging
 import os
 
-from telegram import Update, ForceReply
+from telegram import Update, ForceReply, ReplyKeyboardRemove
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext,ConversationHandler, CallbackQueryHandler
 import leancloud
 from fire import upload_blob
@@ -170,7 +170,8 @@ def main(token) -> None:
         states={
             0: [
                 MessageHandler((Filters.text | Filters.photo) & ~Filters.command, tell_thread), 
-                CommandHandler('enter', thread_create)
+                CommandHandler('enter', thread_create),
+                CommandHandler('cancel', cancel)
             ],
         },
         fallbacks=[CommandHandler('enter', thread_create)],

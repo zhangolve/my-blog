@@ -14,7 +14,7 @@ def upload_blob(source_file_name, destination_blob_name):
 
     blob = bucket.blob(destination_blob_name)
 
-    blob.upload_from_filename(source_file_name, content_type='image/jpeg', timeout=(6.05, 60), num_retries=5)
+    blob.upload_from_filename(source_file_name, content_type='image/jpeg', timeout=(6.05, 20), num_retries=5)
     blob.make_public()
     return blob.public_url
     # blob.upload_from_file(file)

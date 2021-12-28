@@ -9,7 +9,7 @@ TOTAL_SEARCH_REPLY = ''
 
 def search_in_shudong(text):
     result = []
-    with open('../shudong_data/leancloud/data.json') as fp:
+    with open('./data.json') as fp:
         data = json.load(fp)
         if data:
             for shudong in data:
@@ -21,7 +21,7 @@ def search_in_shudong(text):
 
 def search_in_tweet(text):
     result = []
-    with open('../shudong_data/leancloud/tweet.js') as fp:
+    with open('./tweet.js') as fp:
         # fp as a string
         data = fp.read()
         tweets = json.loads(data[25:])
@@ -48,14 +48,7 @@ def could_search(update: Update, context: CallbackContext):
 def search_text(update: Update, context: CallbackContext):
     tweet_list = search(update.message.text)
     reply_content = ''
-    keyboard = [
-        [
-        InlineKeyboardButton("下一页", callback_data="1"),
-        ]
-    ]
-
-    reply_markup = InlineKeyboardMarkup(keyboard)
-
+    reply_markup = None
     if tweet_list:
         for tweet in tweet_list:
             reply_content = reply_content + f'{tweet["tweet"]["full_text"]}\n' + f'{tweet["tweet"]["created_at"]}\n'
@@ -65,6 +58,12 @@ def search_text(update: Update, context: CallbackContext):
     if len(reply_content) > 4096:
         TOTAL_SEARCH_REPLY = reply_content
         reply_content = reply_content[:4096]
+        keyboard = [
+            [
+            InlineKeyboardButton("下一页", callback_data="1"),
+            ]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
     else:
         TOTAL_SEARCH_REPLY = ''
     update.message.reply_text(reply_content, reply_markup=reply_markup)
