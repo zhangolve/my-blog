@@ -9,3 +9,4 @@ cachetools==4.2.2
 leancloud==2.9.9
 python-telegram-bot==13.9
 firebase_admin==5.2.0
+tenacity==8.0.1
