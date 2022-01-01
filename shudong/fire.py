@@ -19,7 +19,7 @@ def get_bucket():
 def upload_file_to_bucket(bucket, source_file_name, destination_blob_name):
     blob = bucket.blob(destination_blob_name)
     blob.chunk_size = 5 * 1024 * 1024 # Set 5 MB blob size
-    blob.upload_from_filename(source_file_name, content_type='image/jpeg',)
+    blob.upload_from_filename(source_file_name, content_type='image/jpeg',timeout=(3.6,8))
     blob.make_public()
     return blob.public_url
 
