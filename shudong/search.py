@@ -1,8 +1,8 @@
 import json
-
+from datetime import datetime, timedelta, timezone
 from telegram import Update, ForceReply, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext,ConversationHandler, CallbackQueryHandler
-
+from shudong_utils import twitter_utc_time_to_local_time, twitter_utc_time_format
 SEARCH_REPLY_PAGE = 0
 TOTAL_SEARCH_REPLY = ''
 
@@ -15,7 +15,7 @@ def search_in_shudong(text):
             for shudong in data:
                 full_text = shudong['tweet']['full_text']
                 if text in full_text:
-                    result.append(shudong)
+                    result.append(shudong['tweet'])
     return result
 
 
@@ -29,7 +29,10 @@ def search_in_tweet(text):
             for tweet in tweets:
                 full_text = tweet['tweet']['full_text']
                 if text in full_text:
-                    result.append(tweet)
+                    created_at = tweet['tweet']['created_at']
+                    createdAt = twitter_utc_time_to_local_time(created_at)
+                    tweet['tweet']['createdAt'] = createdAt
+                    result.append(tweet['tweet'])
     return result
 
 
@@ -37,7 +40,7 @@ def search(text):
     result = []
     result.extend(search_in_tweet(text))
     result.extend(search_in_shudong(text))
-    return result
+    return sorted(result, key=lambda shudong: datetime.strptime(shudong['created_at'], twitter_utc_time_format))
 
 
 def could_search(update: Update, context: CallbackContext):
@@ -51,7 +54,7 @@ def search_text(update: Update, context: CallbackContext):
     reply_markup = None
     if tweet_list:
         for tweet in tweet_list:
-            reply_content = reply_content + f'{tweet["tweet"]["full_text"]}\n' + f'{tweet["tweet"]["created_at"]}\n'
+            reply_content = reply_content + f'{tweet["full_text"]}\n' + f'{tweet["createdAt"]}\n'
     else:
         reply_content = '没有找到相关内容'
     global TOTAL_SEARCH_REPLY

@@ -41,6 +41,7 @@ jobs:
         cp leancloud/data.json ../shudong/data.json
         cp leancloud/tweet.js ../shudong/tweet.js
         cp leancloud/data.js ../shudong/data.js
+        cp leancloud/shudong_utils.py ../shudong/shudong_utils.py
     - name: listen
       run: | 
         pip install --no-cache-dir -r shudong/requirements.txt
