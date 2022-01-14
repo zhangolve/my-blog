@@ -57,3 +57,6 @@ categories: 简述
 感兴趣的同学，可以看看`ant-design`项目中使用的browserlist。
 
 https://github.com/ant-design/antd-tools/blob/master/lib/getBabelCommonConfig.js
+
+
+其他相关更新： [前端项目依赖升级踩的坑](https://hktkdy.com/2021/01/14/%E5%89%8D%E7%AB%AF%E5%8D%87%E7%BA%A7)
