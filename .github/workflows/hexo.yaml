@@ -50,7 +50,7 @@ jobs:
         npm install hexo-generator-sitemap --save
   
     # - name: SSH connection to Actions
-    #  uses: P3TERX/ssh2actions@v1.0.0
+    #   uses: P3TERX/ssh2actions@v1.0.0
 
     - name: next theme
       run: |
@@ -69,8 +69,8 @@ jobs:
         cp ../2021/  source/_posts/ -r
         cp ../2022/  source/_posts/ -r
 
-#- name: SSH connection to Actions
-# uses: P3TERX/ssh2actions@v1.0.0
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@v1.0.0
   
     - name: Generate files and deploy
       # 编译 markdown 文件
