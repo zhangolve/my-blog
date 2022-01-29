@@ -6,7 +6,7 @@ tornado>=6.1
 APScheduler==3.6.3
 pytz>=2018.6
 cachetools==4.2.2
-leancloud==2.9.9
+leancloud==2.9.10
 python-telegram-bot==13.9
 firebase_admin==5.2.0
 tenacity==8.0.1
