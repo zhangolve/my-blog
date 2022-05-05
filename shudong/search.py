@@ -3,9 +3,13 @@ from datetime import datetime, timedelta, timezone
 from telegram import Update, ForceReply, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext,ConversationHandler, CallbackQueryHandler
 from shudong_utils import twitter_utc_time_to_local_time, twitter_utc_time_format
+import glob
+import urllib.parse
+
 SEARCH_REPLY_PAGE = 0
 TOTAL_SEARCH_REPLY = ''
 
+GITHUB_REPO_PREVIEW = 'github.com/zhangolve/my-blog/blob/master/'
 
 def search_in_shudong(text):
     result = []
@@ -14,7 +18,9 @@ def search_in_shudong(text):
         if data:
             for shudong in data:
                 full_text = shudong['tweet']['full_text']
-                if text in full_text:
+                lower_text = text.lower()
+                lower_full_text = full_text.lower()
+                if lower_text in lower_full_text:
                     result.append(shudong['tweet'])
     return result
 
@@ -28,11 +34,44 @@ def search_in_tweet(text):
         if tweets:
             for tweet in tweets:
                 full_text = tweet['tweet']['full_text']
-                if text in full_text:
+                lower_text = text.lower()
+                lower_full_text = full_text.lower()
+                if text in lower_full_text:
                     created_at = tweet['tweet']['created_at']
                     createdAt = twitter_utc_time_to_local_time(created_at)
                     tweet['tweet']['createdAt'] = createdAt
                     result.append(tweet['tweet'])
+    return result
+
+
+def search_in_markdown(text):
+    result = []
+    md_files = []
+    for file in glob.glob("../**/*.md"):
+        md_files.append(file)
+    for file in md_files:
+        with open(file, 'r') as fp:
+            fp_str = fp.read()
+            if text in fp_str:
+                index = fp_str.find(text)
+                abbr = fp_str[index-100:index+100]
+                result.append(abbr + '\n'+ file.replace('../',GITHUB_REPO_PREVIEW))
+    return result
+
+
+def search_in_text(text):
+    result = []
+    text_files = []
+    for file in glob.glob("../*.txt"):
+        text_files.append(file)
+    print(text_files)
+    for file in text_files:
+        with open(file, 'r') as fp:
+            fp_str = fp.read()
+            if text in fp_str:
+                index = fp_str.find(text)
+                abbr = fp_str[index-100:index+100]
+                result.append(abbr + '\n'+ urllib.parse.quote(file.replace('../',GITHUB_REPO_PREVIEW)))
     return result
 
 
@@ -41,6 +80,13 @@ def search(text):
     result.extend(search_in_tweet(text))
     result.extend(search_in_shudong(text))
     return sorted(result, key=lambda shudong: datetime.strptime(shudong['created_at'], twitter_utc_time_format))
+
+
+def search_blog(text):
+    result = []
+    result.extend(search_in_markdown(text))
+    result.extend(search_in_text(text))
+    return result
 
 
 def could_search(update: Update, context: CallbackContext):
@@ -55,7 +101,11 @@ def search_text(update: Update, context: CallbackContext):
     if tweet_list:
         for tweet in tweet_list:
             reply_content = reply_content + f'{tweet["full_text"]}\n' + f'{tweet["createdAt"]}\n'
-    else:
+    blog_list = search_blog(update.message.text)
+    if blog_list:
+        for blog in blog_list:
+            reply_content = reply_content + f'{blog}\n'
+    if not reply_content:
         reply_content = '没有找到相关内容'
     global TOTAL_SEARCH_REPLY
     if len(reply_content) > 4096:
