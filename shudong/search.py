@@ -96,17 +96,22 @@ def could_search(update: Update, context: CallbackContext):
 
 def search_text(update: Update, context: CallbackContext):
     tweet_list = search(update.message.text)
+    count = len(tweet_list)
     reply_content = ''
     reply_markup = None
     if tweet_list:
         for tweet in tweet_list:
             reply_content = reply_content + f'{tweet["full_text"]}\n' + f'{tweet["createdAt"]}\n'
     blog_list = search_blog(update.message.text)
+    count += len(blog_list)
+    
     if blog_list:
         for blog in blog_list:
             reply_content = reply_content + f'{blog}\n'
     if not reply_content:
         reply_content = '没有找到相关内容'
+    else:
+        reply_content = '共计找到' + str(count) + '条搜索结果\n' + reply_content 
     global TOTAL_SEARCH_REPLY
     if len(reply_content) > 4096:
         TOTAL_SEARCH_REPLY = reply_content
