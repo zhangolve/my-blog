@@ -42,7 +42,6 @@ class MailSender(object):
 				# add MIMEBase object to MIMEMultipart object
 				msg.attach(mime)
                 
-		server.login(self.my_sender, self.my_pass)
                 server=smtplib.SMTP_SSL("smtp.gmail.com", 465)
 		server.login(self.my_sender, self.my_pass)
 		server.sendmail(self.my_sender,self.receiver_addr,msg.as_string())
