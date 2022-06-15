@@ -5,9 +5,9 @@ from weibo import get_weibo_contents
 
 today = date.today()
 d1 = today.strftime("-%m-%d")
+my_sender = '1993oliver.zhang@gmail.com'
+my_pass = 'tfwrnhhtacfgpdvo'
 
-my_sender = '1262010981@qq.com'
-my_pass = 'nrrejsviolzpjchd'
 receiver_addr = ['zhangolve@gmail.com']
 sender_name = 'History blog'
 subject = 'history blog ' + today.strftime("%Y-%m-%d %H:%M:%S")
