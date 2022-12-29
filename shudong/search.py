@@ -165,6 +165,7 @@ def search_button(update: Update, context: CallbackContext) -> None:
     global SEARCH_REPLY_PAGE 
     SEARCH_REPLY_PAGE += int(query.data)
     NEXT_TWO_PAGE_EXIST = True if TOTAL_SEARCH_REPLY[(SEARCH_REPLY_PAGE+1)*4096:] else False
+    InlineKeyboardButtons = []
     if SEARCH_REPLY_PAGE > 1: 
         InlineKeyboardButtons.append(
             InlineKeyboardButton("上一页", callback_data="-1")
