@@ -77,9 +77,8 @@ def search_in_text(text):
 
 
 def search_weibo_contents(text):
-    working_dir = Path()
     contents = []
-    for path in working_dir.glob("../weibo-backup/weibo/*.html"):
+    for path in glob.glob("../weibo-backup/weibo/*.html"):
         with open(path.absolute()) as f:
             content = f.read()
             soup = bs.BeautifulSoup(content, 'html.parser')
