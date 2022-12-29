@@ -3,11 +3,6 @@ from datetime import datetime, timedelta, timezone
 from telegram import Update, ForceReply, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext,ConversationHandler, CallbackQueryHandler
 from shudong_utils import twitter_utc_time_to_local_time, twitter_utc_time_format
-import sys
- 
-# setting path
-sys.path.append('../today')
-from today.weibo import search_weibo_contents
 import glob
 import urllib.parse
 
@@ -80,11 +75,26 @@ def search_in_text(text):
     return result
 
 
+
+def search_weibo_contents(text):
+    working_dir = Path()
+    contents = []
+    for path in working_dir.glob("../weibo-backup/weibo/*.html"):
+        with open(path.absolute()) as f:
+            content = f.read()
+            soup = bs.BeautifulSoup(content, 'html.parser')
+            single_weibo_list = soup.findAll('div', {'class': 'WB_detail'})
+            for single_weibo in single_weibo_list: 
+                content = single_weibo.find(attrs={'node-type': 'feed_list_content'})
+                if content and text in content:
+                    contents.append(single_weibo_list) 
+    return contents
+
+
 def search(text):
     result = []
     result.extend(search_in_tweet(text))
     result.extend(search_in_shudong(text))
-    result.extend(search_weibo_contents(text))
     return sorted(result, key=lambda shudong: datetime.strptime(shudong['created_at'], twitter_utc_time_format))
 
 
@@ -109,11 +119,17 @@ def search_text(update: Update, context: CallbackContext):
         for tweet in tweet_list:
             reply_content = reply_content + f'{tweet["full_text"]}\n' + f'{tweet["createdAt"]}\n'
     blog_list = search_blog(update.message.text)
+
+    weibo_list = search_weibo_contents(update.message.text)
     count += len(blog_list)
-    
+    count += len(weibo_list)
+
     if blog_list:
         for blog in blog_list:
             reply_content = reply_content + f'{blog}\n'
+    if weibo_list:
+        for weibo in weibo_list:
+            reply_content = reply_content + f'{weibo}\n'
     if not reply_content:
         reply_content = '没有找到相关内容'
     else:
