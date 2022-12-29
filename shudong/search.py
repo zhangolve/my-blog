@@ -2,9 +2,11 @@ import json
 from datetime import datetime, timedelta, timezone
 from telegram import Update, ForceReply, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext,ConversationHandler, CallbackQueryHandler
-from shudong_utils import twitter_utc_time_to_local_time, twitter_utc_time_format
+# from shudong_utils import twitter_utc_time_to_local_time, twitter_utc_time_format
 import glob
 import urllib.parse
+import bs4 as bs
+
 
 SEARCH_REPLY_PAGE = 0
 TOTAL_SEARCH_REPLY = ''
@@ -79,16 +81,20 @@ def search_in_text(text):
 def search_weibo_contents(text):
     contents = []
     for path in glob.glob("../weibo-backup/weibo/*.html"):
-        with open(path.absolute()) as f:
+        with open(path, 'r') as f:
             content = f.read()
+            if text not in content:
+                continue
             soup = bs.BeautifulSoup(content, 'html.parser')
             single_weibo_list = soup.findAll('div', {'class': 'WB_detail'})
             for single_weibo in single_weibo_list: 
-                content = single_weibo.find(attrs={'node-type': 'feed_list_content'})
-                if content and text in content:
-                    contents.append(single_weibo_list) 
+                single_content = single_weibo.find(attrs={'node-type': 'feed_list_content'})
+                if single_content and text in str(single_content):
+                    contents.append(single_weibo.get_text(' ', strip=True)) 
     return contents
 
+
+search_weibo_contents('袭人')
 
 def search(text):
     result = []
