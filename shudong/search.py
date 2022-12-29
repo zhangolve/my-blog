@@ -3,6 +3,10 @@ from datetime import datetime, timedelta, timezone
 from telegram import Update, ForceReply, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext,ConversationHandler, CallbackQueryHandler
 from shudong_utils import twitter_utc_time_to_local_time, twitter_utc_time_format
+import sys
+ 
+# setting path
+sys.path.append('../today')
 from today.weibo import search_weibo_contents
 import glob
 import urllib.parse
