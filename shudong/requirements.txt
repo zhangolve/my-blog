@@ -11,3 +11,4 @@ python-telegram-bot==13.9
 firebase_admin==5.2.0
 tenacity==8.0.1
 typing-extensions==4.0.1
+bs4==0.0.1
