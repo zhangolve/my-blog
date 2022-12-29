@@ -54,7 +54,7 @@ def search_in_markdown(text):
     for file in md_files:
         with open(file, 'r') as fp:
             fp_str = fp.read()
-            if text in fp_str:
+            if text in fp_str.lower():
                 index = fp_str.find(text)
                 abbr = fp_str[index-100:index+100]
                 result.append(abbr + '\n'+ file.replace('../',GITHUB_REPO_PREVIEW))
@@ -70,7 +70,7 @@ def search_in_text(text):
     for file in text_files:
         with open(file, 'r') as fp:
             fp_str = fp.read()
-            if text in fp_str:
+            if text in fp_str.lower():
                 index = fp_str.find(text)
                 abbr = fp_str[index-100:index+100]
                 result.append(abbr + '\n'+ urllib.parse.quote(file.replace('../',GITHUB_REPO_PREVIEW)))
@@ -83,13 +83,13 @@ def search_weibo_contents(text):
     for path in glob.glob("../weibo-backup/weibo/*.html"):
         with open(path, 'r') as f:
             content = f.read()
-            if text not in content:
+            if text not in content.lower():
                 continue
             soup = bs.BeautifulSoup(content, 'html.parser')
             single_weibo_list = soup.findAll('div', {'class': 'WB_detail'})
             for single_weibo in single_weibo_list: 
                 single_content = single_weibo.find(attrs={'node-type': 'feed_list_content'})
-                if single_content and text in str(single_content):
+                if single_content and text in str(single_content).lower():
                     contents.append(single_weibo.get_text(' ', strip=True)) 
     return contents
 
@@ -116,7 +116,7 @@ def could_search(update: Update, context: CallbackContext):
 
 
 def search_text(update: Update, context: CallbackContext):
-    tweet_list = search(update.message.text)
+    tweet_list = search(update.message.text.lower())
     count = len(tweet_list)
     reply_content = ''
     reply_markup = None
