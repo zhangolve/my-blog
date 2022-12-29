@@ -162,11 +162,11 @@ def search_button(update: Update, context: CallbackContext) -> None:
     # CallbackQueries need to be answered, even if no notification to the user is needed
     # Some clients may have trouble otherwise. See https://core.telegram.org/bots/api#callbackquery
     query.answer()
-    global SEARCH_REPLY_PAGE 
+    global SEARCH_REPLY_PAGE
     SEARCH_REPLY_PAGE += int(query.data)
     NEXT_TWO_PAGE_EXIST = True if TOTAL_SEARCH_REPLY[(SEARCH_REPLY_PAGE+1)*4096:] else False
     InlineKeyboardButtons = []
-    if SEARCH_REPLY_PAGE > 1: 
+    if SEARCH_REPLY_PAGE > 0: 
         InlineKeyboardButtons.append(
             InlineKeyboardButton("上一页", callback_data="-1")
         )
