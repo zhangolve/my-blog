@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 from telegram import Update, ForceReply, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext,ConversationHandler, CallbackQueryHandler
 from shudong_utils import twitter_utc_time_to_local_time, twitter_utc_time_format
+from today.weibo import search_weibo_contents
 import glob
 import urllib.parse
 
@@ -79,6 +80,7 @@ def search(text):
     result = []
     result.extend(search_in_tweet(text))
     result.extend(search_in_shudong(text))
+    result.extend(search_weibo_contents(text))
     return sorted(result, key=lambda shudong: datetime.strptime(shudong['created_at'], twitter_utc_time_format))
 
 
