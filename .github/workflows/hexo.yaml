@@ -11,6 +11,7 @@ on:
       - '2020/**.md'
       - '2021/**.md' 
       - '2022/**.md' 
+      - '2023/**.md' 
       - 'hexo/*'
 
 env:
@@ -68,6 +69,7 @@ jobs:
         cp ../2020/  source/_posts/ -r
         cp ../2021/  source/_posts/ -r
         cp ../2022/  source/_posts/ -r
+        cp ../2023/  source/_posts/ -r
 
     # - name: SSH connection to Actions
     #   uses: P3TERX/ssh2actions@v1.0.0
