@@ -1,0 +1,38 @@
+name: douban status write to shudong
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+  schedule:
+      # * is a special character in YAML so you have to quote this string
+      - cron:  '0 */5 * * *'
+env:
+  TZ: Asia/Shanghai
+
+# concurrency: staging_environment
+concurrency: 
+  group: ${{github.workflow}}
+  cancel-in-progress: true
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: set up
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: set up env
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.7' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+        architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+        cache: 'pip'
+        cache-dependency-path: 'shudong/requirements.txt'
+    # - name: SSH connection to Actions
+    #   uses: P3TERX/ssh2actions@v1.0.0
+    - name: write
+      run: | 
+        pip install --no-cache-dir -r shudong/requirements.txt
+        cd shudong
+        python douban.py
