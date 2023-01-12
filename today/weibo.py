@@ -27,19 +27,4 @@ def get_weibo_contents():
     return contents
 
 
-def search_weibo_contents(text):
-    working_dir = Path()
-    contents = []
-    for path in working_dir.glob("../weibo-backup/weibo/*.html"):
-        with open(path.absolute()) as f:
-            content = f.read()
-            soup = bs.BeautifulSoup(content, 'html.parser')
-            single_weibo_list = soup.findAll('div', {'class': 'WB_detail'})
-            for single_weibo in single_weibo_list: 
-                content = single_weibo.find(attrs={'node-type': 'feed_list_content'})
-                if content and text in content:
-                    contents.append(single_weibo_list) 
-    return contents
-
-
             
