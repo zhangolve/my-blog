@@ -90,6 +90,12 @@ def help_command(update: Update, context: CallbackContext) -> None:
     update.message.reply_text('Help!')
 
 
+def beiwang_command(update: Update, context: CallbackContext) -> None:
+    """Send a message when the command /beiwang is issued."""
+    # 查看备忘信息
+    # 更新备忘
+    update.message.reply_text('https://github.com/hktkdy/shudong/blob/master/备忘.md')
+
 
 def write_shudong(update: Update, context: CallbackContext) -> None:
     """Echo the user message."""
@@ -154,8 +160,10 @@ def main(token) -> None:
     # on different commands - answer in Telegram
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("help", help_command))
+    # 备忘信息查看
+    dispatcher.add_handler(CommandHandler("beiwang", beiwang_command))
 
-        
+
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('search', could_search)],
         states={
