@@ -97,6 +97,13 @@ def beiwang_command(update: Update, context: CallbackContext) -> None:
     update.message.reply_text('https://github.com/hktkdy/shudong/blob/master/备忘.md')
 
 
+def todo_command(update: Update, context: CallbackContext) -> None:
+    """Send a message when the command /todo is issued."""
+    # 查看备忘信息
+    # 更新备忘
+    update.message.reply_text('https://github.com/hktkdy/shudong/blob/master/todo.md')
+
+
 def write_shudong(update: Update, context: CallbackContext) -> None:
     """Echo the user message."""
     write_single_shudong(update.message.text)
@@ -162,6 +169,7 @@ def main(token) -> None:
     dispatcher.add_handler(CommandHandler("help", help_command))
     # 备忘信息查看
     dispatcher.add_handler(CommandHandler("beiwang", beiwang_command))
+    dispatcher.add_handler(CommandHandler("todo", todo_command))
 
 
     conv_handler = ConversationHandler(
