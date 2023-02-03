@@ -8,3 +8,5 @@ fixture
 
 
 https://github.com/swc-project/plugins/blob/main/.github/workflows/publish.yml
+
+cargo build  --release --target wasm32-wasi
