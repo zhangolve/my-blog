@@ -82,7 +82,7 @@ description: 踩了坑，是幸福呢，还是不幸呢
 
 
 FYI:
-1 [ 一文带你走进 Rust 和 WebAssembly 的世界 ](https://juejin.cn/post/6995518096576348173)
-2 [babel 与 polyfill两三事.md](https://www.jianshu.com/p/bb0621101308)
-3 [前端项目依赖升级踩的坑](https://hktkdy.com/2022/01/14/2022/fe_upgrade/)
+- 1 [ 一文带你走进 Rust 和 WebAssembly 的世界 ](https://juejin.cn/post/6995518096576348173)
+- 2 [babel 与 polyfill两三事.md](https://www.jianshu.com/p/bb0621101308)
+- 3 [前端项目依赖升级踩的坑](https://hktkdy.com/2022/01/14/2022/fe_upgrade/)
 
