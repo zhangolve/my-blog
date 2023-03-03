@@ -114,6 +114,7 @@ def search_ocr(str):
     query = Shudong.query
     query.contains('new_ocr', str)
     results = query.find()
+    # limit default 100
     ocr_results = []
     for r in results:
         r_dict = {}
