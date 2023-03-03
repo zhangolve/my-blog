@@ -116,11 +116,13 @@ def search_ocr(str):
     results = query.find()
     ocr_results = []
     for r in results:
-        r['full_text'] = r['content']
-        createdAt = r['createdAt']
+        r_dict = {}
+        r_dict['full_text'] = r.get('content')
+        createdAt = r.get('createdAt')
         createdAt_twitter_format = datetime_to_twitter_utc_time(createdAt)
-        r['created_at'] = createdAt_twitter_format
-        ocr_results.append(r)
+        r_dict['created_at'] = createdAt_twitter_format
+        ocr_results.append(r_dict)
+    return ocr_results
 
 
 def search(text):
