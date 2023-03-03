@@ -2,10 +2,21 @@ import json
 from datetime import datetime, timedelta, timezone
 from telegram import Update, ForceReply, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext,ConversationHandler, CallbackQueryHandler
-from shudong_utils import twitter_utc_time_to_local_time, twitter_utc_time_format
+from shudong_utils import twitter_utc_time_to_local_time, twitter_utc_time_format, datetime_to_twitter_utc_time
 import glob
 import urllib.parse
 import bs4 as bs
+import leancloud
+
+
+
+leancloud.init("rkX7RdhzjQ0DdnpkcffRn4TD-gzGzoHsz", "pbWq8UDhvWbRpjebqfhqj4pG")
+
+if os.environ.get('USER') == 'zhangolive':
+    Shudong = leancloud.Object.extend('shudong_test')
+else:
+    Shudong = leancloud.Object.extend('shudong')
+
 
 
 SEARCH_REPLY_PAGE = 0
@@ -94,12 +105,28 @@ def search_weibo_contents(text):
     return contents
 
 
-search_weibo_contents('袭人')
+
+Shudong = leancloud.Object.extend('shudong')
+
+
+def search_ocr(str):
+    query = Shudong.query
+    query.contains('new_ocr', str)
+    results = query.find()
+    ocr_results = []
+    for r in results:
+        r['full_text'] = r['content']
+        createdAt = r['createdAt']
+        createdAt_twitter_format = datetime_to_twitter_utc_time(createdAt)
+        r['created_at'] = createdAt_twitter_format
+        ocr_results.append(r)
+
 
 def search(text):
     result = []
     result.extend(search_in_tweet(text))
     result.extend(search_in_shudong(text))
+    result.extend(search_ocr(text))
     return sorted(result, key=lambda shudong: datetime.strptime(shudong['created_at'], twitter_utc_time_format))
 
 
