@@ -121,6 +121,7 @@ def search_ocr(str):
         createdAt = r.get('createdAt')
         createdAt_twitter_format = datetime_to_twitter_utc_time(createdAt)
         r_dict['created_at'] = createdAt_twitter_format
+        r_dict['createdAt'] = createdAt
         ocr_results.append(r_dict)
     return ocr_results
 
