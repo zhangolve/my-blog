@@ -21,7 +21,7 @@ import logging
 import os
 
 from telegram import Update, ForceReply, ReplyKeyboardRemove
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext,ConversationHandler, CallbackQueryHandler
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, CallbackContext,ConversationHandler, CallbackQueryHandler
 import leancloud
 from fire import upload_blob
 from search import search, search_button, search_text, could_search
@@ -71,86 +71,86 @@ def upload_single_photo(photo_file):
     return url
 
 
-def upload_photo(update: Update, context: CallbackContext) -> int:
+async def upload_photo(update: Update, context: CallbackContext) -> int:
     """Stores the photo and asks for a location."""
     caption = update.message.caption or ''
     photo_file = update.message.photo[-1].get_file()
     url = upload_single_photo(photo_file)
     shudong = caption + '\n' + url
     write_single_shudong(shudong, [url])
-    update.message.reply_text(shudong)
-    update.message.reply_text(
+    await update.message.reply_text(shudong)
+    await update.message.reply_text(
         'photo uploaded'
     )
     return shudong
 
 
-def help_command(update: Update, context: CallbackContext) -> None:
+async def help_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /help is issued."""
-    update.message.reply_text('Help!')
+    await update.message.reply_text('Help!')
 
 
-def beiwang_command(update: Update, context: CallbackContext) -> None:
+async def beiwang_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /beiwang is issued."""
     # 查看备忘信息
     # 更新备忘
-    update.message.reply_text('https://github.com/hktkdy/shudong/blob/master/备忘.md')
+    await update.message.reply_text('https://github.com/hktkdy/shudong/blob/master/备忘.md')
 
 
-def todo_command(update: Update, context: CallbackContext) -> None:
+async def todo_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /todo is issued."""
     # 查看备忘信息
     # 更新备忘
-    update.message.reply_text('https://github.com/hktkdy/shudong/blob/master/todo.md')
+    await update.message.reply_text('https://github.com/hktkdy/shudong/blob/master/todo.md')
 
 
-def write_shudong(update: Update, context: CallbackContext) -> None:
+async def write_shudong(update: Update, context: CallbackContext) -> None:
     """Echo the user message."""
     write_single_shudong(update.message.text)
-    update.message.reply_text('content saved')
+    await update.message.reply_text('content saved')
 
 
 
 
 # thread logic
 
-def could_thread(update: Update, context: CallbackContext):
+async def could_thread(update: Update, context: CallbackContext):
     global THREAD_ARR
     global PHOTOS 
     THREAD_ARR = []
     PHOTOS = []
-    update.message.reply_text('请开始你的表演')
+    await update.message.reply_text('请开始你的表演')
     return 0
 
 
-def tell_thread(update: Update, context: CallbackContext):
+async def tell_thread(update: Update, context: CallbackContext):
     if update.message.text:
         THREAD_ARR.append(update.message.text)
     if update.message.photo:
         photo_file = update.message.photo[-1].get_file()
         url = upload_single_photo(photo_file)
         PHOTOS.append(url)
-    update.message.reply_text('请继续你的表演')
+    await update.message.reply_text('请继续你的表演')
     return 0
 
 
-def thread_create(update: Update, context: CallbackContext):
+async def thread_create(update: Update, context: CallbackContext):
     print('create')
     global THREAD_ARR 
     global PHOTOS
     shudong = '\n'.join(THREAD_ARR) + '\n' + '\n'.join(PHOTOS)
     write_single_shudong(shudong, PHOTOS)
-    update.message.reply_text('preview shudong:'+ shudong)
+    await update.message.reply_text('preview shudong:'+ shudong)
     THREAD_ARR= []
     PHOTOS = []
     return ConversationHandler.END
 
 
-def cancel(update: Update, context: CallbackContext) -> int:
+async def cancel(update: Update, context: CallbackContext) -> int:
     """Cancels and ends the conversation."""
     user = update.message.from_user
     logger.info("User %s canceled the conversation.", user.first_name)
-    update.message.reply_text(
+    await update.message.reply_text(
         'Bye! I hope we can talk again some day.', reply_markup=ReplyKeyboardRemove()
     )
 
@@ -159,10 +159,14 @@ def cancel(update: Update, context: CallbackContext) -> int:
 
 def main(token) -> None:
     """Start the bot."""
-    updater = Updater(token)
+    updater = (
+       ApplicationBuilder()
+        .token(token)
+        .concurrent_updates(True)
+        .build()
+    )
 
-    # Get the dispatcher to register handlers
-    dispatcher = updater.dispatcher
+    dispatcher = updater
 
     # on different commands - answer in Telegram
     dispatcher.add_handler(CommandHandler("start", start))
@@ -175,7 +179,7 @@ def main(token) -> None:
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('search', could_search)],
         states={
-            0: [MessageHandler(Filters.text, search_text)],
+            0: [MessageHandler(filters.TEXT, search_text)],
         },
         fallbacks=[CommandHandler('cancel', cancel)],
     )
@@ -185,7 +189,7 @@ def main(token) -> None:
         entry_points=[CommandHandler('thread', could_thread)],
         states={
             0: [
-                MessageHandler((Filters.text | Filters.photo) & ~Filters.command, tell_thread), 
+                MessageHandler((filters.TEXT | filters.PHOTO) & ~filters.COMMAND, tell_thread), 
                 CommandHandler('enter', thread_create),
                 CommandHandler('cancel', cancel)
             ],
@@ -195,18 +199,12 @@ def main(token) -> None:
     dispatcher.add_handler(thread_handler)    
 
     # on non command i.e message - write_shudong the message on Telegram
-    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, write_shudong))
-    dispatcher.add_handler(MessageHandler(Filters.photo & ~Filters.command, upload_photo))
+    dispatcher.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, write_shudong))
+    dispatcher.add_handler(MessageHandler(filters.PHOTO & ~filters.COMMAND, upload_photo))
     dispatcher.add_handler(CallbackQueryHandler(search_button))
     
     # Start the Bot
-    updater.start_polling()
-
-    # Run the bot until you press Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
-    updater.idle()
-
+    updater.run_polling()
 
 
 def init():

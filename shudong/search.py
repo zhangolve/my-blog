@@ -1,7 +1,8 @@
 import json
 from datetime import datetime, timedelta, timezone
 from telegram import Update, ForceReply, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext,ConversationHandler, CallbackQueryHandler
+from telegram.constants import ParseMode, ChatAction
+from telegram.ext import Updater, CommandHandler, MessageHandler, filters, CallbackContext,ConversationHandler, CallbackQueryHandler
 from shudong_utils import twitter_utc_time_to_local_time, twitter_utc_time_format, datetime_to_twitter_utc_time
 import glob
 import urllib.parse
@@ -129,8 +130,8 @@ def search_ocr(str):
 
 def search(text):
     result = []
-    result.extend(search_in_tweet(text))
-    result.extend(search_in_shudong(text))
+    # result.extend(search_in_tweet(text))
+    # result.extend(search_in_shudong(text))
     result.extend(search_ocr(text))
     return sorted(result, key=lambda shudong: datetime.strptime(shudong['created_at'], twitter_utc_time_format))
 
@@ -142,12 +143,26 @@ def search_blog(text):
     return result
 
 
-def could_search(update: Update, context: CallbackContext):
-    update.message.reply_text('清输入搜索内容')
+async def could_search(update: Update, context: CallbackContext):
+    await update.message.reply_text('清输入搜索内容')
     return 0
 
 
-def search_text(update: Update, context: CallbackContext):
+def handle_img(string):
+    match_string = "https://storage.googleapis.com"
+    if match_string not in string:
+        return string
+    split_string = string.split()
+    for i in range(len(split_string)):
+        if split_string[i].startswith("https://storage.googleapis.com"):
+            img_tag = "![]('" + split_string[i] + "')"
+            split_string[i] = img_tag
+    result = " ".join(split_string)
+    print(result)
+    return result
+
+
+async def search_text(update: Update, context: CallbackContext):
     tweet_list = search(update.message.text.lower())
     count = len(tweet_list)
     reply_content = ''
@@ -183,7 +198,7 @@ def search_text(update: Update, context: CallbackContext):
         reply_markup = InlineKeyboardMarkup(keyboard)
     else:
         TOTAL_SEARCH_REPLY = ''
-    update.message.reply_text(reply_content, reply_markup=reply_markup)
+    await update.message.reply_text(reply_content, reply_markup=reply_markup)
     return ConversationHandler.END
 
 
