@@ -25,6 +25,9 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 import leancloud
 from fire import upload_blob
 from search import search, search_button, search_text, could_search
+from pathlib import Path
+import tempfile
+
 leancloud.init("rkX7RdhzjQ0DdnpkcffRn4TD-gzGzoHsz", "pbWq8UDhvWbRpjebqfhqj4pG")
 
 if os.environ.get('USER') == 'zhangolive':
@@ -63,19 +66,23 @@ def write_single_shudong(text, photos=None):
     shudong.save()
 
 
-def upload_single_photo(photo_file):
-    file_unique_id = photo_file['file_unique_id']
-    file_name = '{}.jpg'.format(file_unique_id)
-    photo_file.download(file_name)
-    url = upload_blob('./{}'.format(file_name), file_name)
-    return url
+async def upload_single_photo(photo_file, id):
+    # file_unique_id = photo_file['file_unique_id']
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_dir = Path(tmp_dir)
+        file_name = '{}.jpg'.format(id)
+        file_path = tmp_dir / file_name
+        await photo_file.download_to_drive(file_path)
+        url = upload_blob(file_path, file_name)
+        return url
 
 
 async def upload_photo(update: Update, context: CallbackContext) -> int:
     """Stores the photo and asks for a location."""
     caption = update.message.caption or ''
-    photo_file = update.message.photo[-1].get_file()
-    url = upload_single_photo(photo_file)
+    photo = update.message.photo[-1]
+    photo_file = await context.bot.get_file(photo.file_id)
+    url = await upload_single_photo(photo_file, photo.file_id)
     shudong = caption + '\n' + url
     write_single_shudong(shudong, [url])
     await update.message.reply_text(shudong)
@@ -108,8 +115,6 @@ async def write_shudong(update: Update, context: CallbackContext) -> None:
     """Echo the user message."""
     write_single_shudong(update.message.text)
     await update.message.reply_text('content saved')
-
-
 
 
 # thread logic
@@ -157,6 +162,10 @@ async def cancel(update: Update, context: CallbackContext) -> int:
     return ConversationHandler.END
 
 
+async def error_handle(update: Update, context: CallbackContext) -> None:
+    await context.bot.send_message(update.effective_chat.id, "Some error in error handler")
+
+
 def main(token) -> None:
     """Start the bot."""
     updater = (
@@ -202,7 +211,7 @@ def main(token) -> None:
     dispatcher.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, write_shudong))
     dispatcher.add_handler(MessageHandler(filters.PHOTO & ~filters.COMMAND, upload_photo))
     dispatcher.add_handler(CallbackQueryHandler(search_button))
-    
+    dispatcher.add_error_handler(error_handle)
     # Start the Bot
     updater.run_polling()
 
