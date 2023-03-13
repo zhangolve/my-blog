@@ -224,5 +224,5 @@ def search_button(update: Update, context: CallbackContext) -> None:
     keyboard = [InlineKeyboardButtons]
     reply_markup = InlineKeyboardMarkup(keyboard)
     print(SEARCH_REPLY_PAGE , len(TOTAL_SEARCH_REPLY))
-    query.edit_message_text(TOTAL_SEARCH_REPLY[SEARCH_REPLY_PAGE*4096:(SEARCH_REPLY_PAGE+1)*4096], reply_markup=reply_markup)
+    await query.edit_message_text(TOTAL_SEARCH_REPLY[SEARCH_REPLY_PAGE*4096:(SEARCH_REPLY_PAGE+1)*4096], reply_markup=reply_markup)
 
