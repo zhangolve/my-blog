@@ -202,7 +202,7 @@ async def search_text(update: Update, context: CallbackContext):
     return ConversationHandler.END
 
 
-def search_button(update: Update, context: CallbackContext) -> None:
+async def search_button(update: Update, context: CallbackContext) -> None:
     """Parses the CallbackQuery and updates the message text."""
     query = update.callback_query
 
