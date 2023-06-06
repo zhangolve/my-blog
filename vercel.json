@@ -1,0 +1,5 @@
+{
+    "installCommand": "./install.sh",
+    "outputDirectory": "./hexo-blog/public",
+    "buildCommand": "./build.sh"
+}
