@@ -7,6 +7,10 @@ npm install hexo-generator-feed --save
 npm install hexo-generator-sitemap --save
 git clone https://github.com/theme-next/hexo-theme-next themes/next
 cp ../hexo/_next_theme_config.yml themes/next/_config.yml
+
+env_variable="valine"
+valine="$($env_variable)"
+echo "$valine" >> themes/next/_config.yml
 rm -rf source/_posts/*
 cp ../hexo/* . -r
 cp ../2020/  source/_posts/ -r

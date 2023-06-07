@@ -113,7 +113,3 @@ selectionEffect: true
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
 google_analytics: UA-51305251-1
-deploy:
-  type: git
-  repo: 
-    github: git@github.com:zhangolve/zhangolve.github.io.git,master
