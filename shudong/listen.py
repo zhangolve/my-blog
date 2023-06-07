@@ -167,6 +167,7 @@ async def error_handle(update: Update, context: CallbackContext) -> None:
         await context.bot.send_message(update.effective_chat.id, "Some error in error handler")
     else:
         logger.info("user got error")
+        exit(1)
         
 
 def main(token) -> None:
