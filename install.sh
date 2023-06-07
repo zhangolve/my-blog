@@ -15,12 +15,13 @@ if [ ! -d "$directory" ]; then
     valine="$($env_variable)"
     echo "$valine" >> themes/next/_config.yml
     rm -rf source/_posts/*
+    cd ../
 else
     echo "目录已存在：$directory"
 fi
 
-cp ../hexo/* . -r
-cp ../2020/  source/_posts/ -r
-cp ../2021/  source/_posts/ -r
-cp ../2022/  source/_posts/ -r
-cp ../2023/  source/_posts/ -r
+cp ./hexo/* . -r
+cp ./2020/  source/_posts/ -r
+cp ./2021/  source/_posts/ -r
+cp ./2022/  source/_posts/ -r
+cp ./2023/  source/_posts/ -r
