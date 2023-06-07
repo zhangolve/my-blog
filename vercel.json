@@ -1,0 +1,5 @@
+{
+    "installCommand": "chmod +x ./install.sh && ./install.sh",
+    "outputDirectory": "./hexo-blog/public",
+    "buildCommand": "chmod +x ./build.sh && ./build.sh"
+}
