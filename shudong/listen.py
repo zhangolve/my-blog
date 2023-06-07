@@ -163,8 +163,11 @@ async def cancel(update: Update, context: CallbackContext) -> int:
 
 
 async def error_handle(update: Update, context: CallbackContext) -> None:
-    await context.bot.send_message(update.effective_chat.id, "Some error in error handler")
-
+    if update:
+        await context.bot.send_message(update.effective_chat.id, "Some error in error handler")
+    else:
+        logger.info("user got error")
+        
 
 def main(token) -> None:
     """Start the bot."""
