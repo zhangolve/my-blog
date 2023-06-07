@@ -2,6 +2,8 @@ npm install hexo-cli gulp -g
 
 directory="hexo-blog"
 
+rm -rf hexo-blog
+
 if [ ! -d "$directory" ]; then    
     mkdir hexo-blog
     cd hexo-blog
