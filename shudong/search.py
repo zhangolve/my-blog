@@ -130,8 +130,8 @@ def search_ocr(str):
 
 def search(text):
     result = []
-    # result.extend(search_in_tweet(text))
-    # result.extend(search_in_shudong(text))
+    result.extend(search_in_tweet(text))
+    result.extend(search_in_shudong(text))
     result.extend(search_ocr(text))
     return sorted(result, key=lambda shudong: datetime.strptime(shudong['created_at'], twitter_utc_time_format))
 
