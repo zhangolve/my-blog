@@ -1,37 +1,43 @@
 
+# 直播推流:
 
+
+命令:
+```
 ffmpeg -re -i "1.mp4" -vcodec copy -acodec aac -b:a 192k \
 -f flv
-2022-01-16 11:14:48
+```
+
+
 ffmpeg -re -i "1.mp4" -vcodec copy -acodec aac  \
--f flv "rtmp://live-push.bilivideo.com/live-bvc/?streamname=live_545096419_4265304&key=a481670b44d83bba3498684ec7964cf7&schedule=rtmp&pflag=1"
-2022-01-16 11:30:42
-Bilibili推流总中断/ffmpeg
-2022-01-16 12:55:37
-#TODO ffmpeg 倍速视频生成
-2022-02-26 08:04:17
-https://blog.csdn.net/ternence_hsu/article/details/85865718
-#ffmpeg 视频的倍速播放与慢速播放
-2022-02-26 11:11:19
+-f flv "rtmp://address"
+
+
+解释:
+
+这个FFmpeg命令用于将输入文件 "1.mp4" 实时流式传输至 FLV（Flash Video）格式，其中包含对视频流的复制操作、对音频流的重新编码为 AAC 格式，并设置音频比特率为 192k。
+
+
+# 视频，音频视频同时倍速播放。
+
+
+```
 ffmpeg -i input.mkv -filter_complex "[0:v]setpts=0.5*PTS[v];[0:a]atempo=2.0[a]" -map "[v]" -map "[a]" output.mkv
+```
 视频，音频视频同时倍速播放。
-2022-02-26 11:21:56
-https://www.bilibili.com/read/cv1551723
-ffmpeg 降噪
-2022-03-16 15:11:39
-如果有一台虚拟机专门干这个就行了。
-https://storage.googleapis.com/13823zxw.appspot.com/AQADlrQxG02QYFZ-.jpg
-2022-07-12 08:44:32.263000+08:00
-ffmpeg -stream_loop -1 -i input.mp4 -i input.mp3 -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 192k   -c:s mov_text -metadata:s:s:0 language=eng -shortest output.mp4
-2023-04-10 16:13:35
-ffmpeg -i output.mp4 -vf "subtitles=input.srt:force_style='Alignment=2,MarginV=10'" -c:v libx264 -c:a copy output2.mp4
-2023-04-12 17:23:39
-ffmpeg -i output.mp4 -vf "subtitles=input.srt:force_style='Alignment=10,MarginV=10'" -c:v libx264 -c:a copy output2.mp4
-2023-04-12 17:24:20
-ffmpeg -i input1min.mp4 -vf "subtitles=input.srt:force_style='Alignment=10,MarginV=10,PrimaryColour=&#fc5603&,Outline=1,OutlineColour=&H000000&'" -c:v libx264 -c:a copy output2.mp4
-2023-04-12 17:57:20
-https://stackoverflow.com/questions/53631819/is-it-possible-to-add-stroke-to-text-in-ffmpeg
-2023-04-12 17:57:23
+
+
+# ffmpeg 将视频分成多个长度更小的视频
+
+```
+ffmpeg -i output.mp4 -c copy -
+map 0 -segment_time 00:05:00 -f segment -reset_timestamps 1 output%03d.mp4
+
+```
+ffmpeg 将视频分成多个长度更小的视频
+
+
+
 ffmpeg -i input1min.mp4 -vf "subtitles=input.srt:force_style='Alignment=10,MarginV=10,PrimaryColour=&H0000ff&'" -c:v libx264 -c:a copy output2.mp4
 2023-04-12 18:07:31
 ffmpeg -i input.mp4 -vf ‘scale=-1:720,pad=1280:720:(1280-iw)/2:0:black’ -c:v libx264 -crf 21 -preset veryfast -aspect 16:9 -c:a copy -f mp4 output.mp4 -y
@@ -74,3 +80,28 @@ map 0 -segment_time 00:05:00 -f segment -reset_timestamps 1 output%03d.mp4
 ffmpeg 将视频分成多个长度更小的视频
 2023-04-19 14:30:12
 ffmpeg
+
+
+使用ffmpeg合成两个音频，input.mp3, background.mp3, 其中background.mp3作为背景音乐循环播放直到最后，输出音频的长度以input.mp3决定
+ffmpeg -i input.mp3 -stream_loop -1 -i background.mp3 \
+-filter_complex "[1:a]volume=0.4[a1];[0:a][a1]amix=inputs=2:duration=longest" \
+-t `ffprobe -i input.mp3 -show_entries format=duration \
+-v quiet -of csv="p=0"` output.mp3
+2023-04-22 12:29:29
+-preset ultrafast -tune stillimage -crf 18  ffmpeg改了几个参数，提高速度很显著
+3倍
+https://storage.googleapis.com/13823zxw.appspot.com/AgACAgUAAxkBAAIximRbQ5SLdfX3tepkIPsooSPJZTyLAAIYtjEb1V_hVnoDKcvulHaVAQADAgADeAADLwQ.jpg
+2023-05-10 15:11:19
+ffmpeg: 合并音视频，将音频声音降低：
+ffmpeg -i input_video.mp4 -i input_audio.mp3 -filter_complex "[1:a]volume=0.2,aloop=loop=-1:size=2e+09[outa];[0:v][outa]concat=n=1:v=1:a=1[outv][outa]" -map "[outv]" -map "[outa]" output_video.mp4
+2023-05-25 11:47:16
+ffmpeg
+ffmpeg -i 0021-第21集.mp4 -i input.mp3 -filter_complex "[0:a][1:a]amix=inputs=2[outa];[0:v][outa]concat=n=1:v=1:a=1[outv][outa]" -map "[outv]" -map "[outa]" -max_muxing_queue_size 1024 -y output_video21.mp4
+
+合并音频加视频，如果需要将音频降低声音，单独一个命令去做：
+ffmpeg -i input.mp3 -filter:a volume=0.2 output.mp3
+2023-05-25 13:52:45
+ffmpeg -hwaccel cuvid -stream_loop -1 -i input.mp4 -i input.m4a -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 192k -shortest -y output.mp4
+2023-06-23 13:09:08
+
+
