@@ -1,7 +1,8 @@
 title: ubuntu 配置
 date: 2019-03-18 11:18:57
 categories: 简述
-  --- 
+
+--- 
 
 
  /etc/apt/sources.list
