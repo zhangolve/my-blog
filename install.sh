@@ -18,3 +18,4 @@ cp ../2020/  source/_posts/ -r
 cp ../2021/  source/_posts/ -r
 cp ../2022/  source/_posts/ -r
 cp ../2023/  source/_posts/ -r
+cp ../2024/  source/_posts/ -r
