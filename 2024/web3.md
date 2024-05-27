@@ -1,4 +1,4 @@
-title: 处探web3 ，经历了失败的薅羊毛
+title: 初探web3 ，经历了失败的薅羊毛
 date: 2024-04-12 14:41:16
 categories: 生活
 description: 经历了从币安到币安钱包再到bitget钱包，再到bitget，再到bitget绑定的钱包，再回到bitget的过程。
