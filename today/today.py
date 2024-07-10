@@ -1,10 +1,17 @@
 from pathlib import Path
-from datetime import date
+from datetime import datetime
 from mail_sender import MailSender
 from weibo import get_weibo_contents
 
-today = date.today()
+import pytz
+
+# 获取当前时间（使用本地时间）
+local_tz = pytz.timezone('Asia/Shanghai')
+today = datetime.now(local_tz)
+
+# 获取日期部分并格式化
 d1 = today.strftime("-%m-%d")
+
 my_sender = '1993oliver.zhang@gmail.com'
 my_pass = 'tfwrnhhtacfgpdvo'
 
