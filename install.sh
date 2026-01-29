@@ -16,9 +16,4 @@ npm install hexo-theme-next --save
 rm -rf source/_posts/*
         
 cp ../hexo/* . -r
-cp ../2020/  source/_posts/ -r
-cp ../2021/  source/_posts/ -r
-cp ../2022/  source/_posts/ -r
-cp ../2023/  source/_posts/ -r
-cp ../2024/  source/_posts/ -r
-cp ../2025/  source/_posts/ -r
+cp -r ../20{20..99}/ source/_posts/
