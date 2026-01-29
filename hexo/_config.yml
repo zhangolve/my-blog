@@ -109,7 +109,7 @@ stylus:
   compress: false
   
 giscus:
-  enable: true
+  enable: false
   repo: zhangolve/my-blog
   repo_id: MDEwOlJlcG9zaXRvcnkyMzQ1NTMyNTE=
   category: General
