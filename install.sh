@@ -10,6 +10,7 @@ hexo init
 npm install hexo-deployer-git --save
 npm install hexo-generator-feed --save
 npm install hexo-generator-sitemap --save
+npm install hexo-next-giscus --save
 git clone https://github.com/theme-next/hexo-theme-next themes/next
 rm -rf source/_posts/*
         
