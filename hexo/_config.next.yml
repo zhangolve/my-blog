@@ -999,5 +999,5 @@ css: css
 js: js
 images: images
 
-# valine:
-#   enable: false
+valine:
+  enable: false
