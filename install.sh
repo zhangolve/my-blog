@@ -16,4 +16,5 @@ npm install hexo-theme-next --save
 rm -rf source/_posts/*
         
 cp ../hexo/* . -r
-cp -r ../20{20..99}/ source/_posts/
+cp -r ../20[2-9]*/ source/_posts/ 2>/dev/null || true
+
