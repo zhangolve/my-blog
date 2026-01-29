@@ -109,8 +109,8 @@ stylus:
   compress: false
   
 giscus:
-  enable: false
-  repo: zhangolve/my-blog
+  enable: true
+  repo: "zhangolve/my-blog"
   repo_id: MDEwOlJlcG9zaXRvcnkyMzQ1NTMyNTE=
   category: General
   category_id: DIC_kwDODfr_o84C1kv6
