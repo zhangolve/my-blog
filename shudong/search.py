@@ -3,21 +3,26 @@ from datetime import datetime, timedelta, timezone
 from telegram import Update, ForceReply, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode, ChatAction
 from telegram.ext import Updater, CommandHandler, MessageHandler, filters, CallbackContext,ConversationHandler, CallbackQueryHandler
-from shudong_utils import twitter_utc_time_to_local_time, twitter_utc_time_format, datetime_to_twitter_utc_time
+from shudong_utils import format_tweet_to_beijing
 import glob
 import urllib.parse
 import bs4 as bs
 import leancloud
 import os
+from dotenv import load_dotenv
+from supabase import create_client, Client
+import uuid
+
+load_dotenv()
+supabase = create_client("https://zdppyeuzhfvilfumszao.supabase.co", os.getenv("SUPABASE_KEY"))
 
 
+# leancloud.init("rkX7RdhzjQ0DdnpkcffRn4TD-gzGzoHsz", "pbWq8UDhvWbRpjebqfhqj4pG")
 
-leancloud.init("rkX7RdhzjQ0DdnpkcffRn4TD-gzGzoHsz", "pbWq8UDhvWbRpjebqfhqj4pG")
-
-if os.environ.get('USER') == 'zhangolive':
-    Shudong = leancloud.Object.extend('shudong_test')
-else:
-    Shudong = leancloud.Object.extend('shudong')
+# if os.environ.get('USER') == 'zhangolive':
+#     Shudong = leancloud.Object.extend('shudong_test')
+# else:
+#     Shudong = leancloud.Object.extend('shudong')
 
 
 
@@ -26,37 +31,72 @@ TOTAL_SEARCH_REPLY = ''
 
 GITHUB_REPO_PREVIEW = 'github.com/zhangolve/my-blog/blob/master/'
 
-def search_in_shudong(text):
-    result = []
-    with open('./data.json') as fp:
-        data = json.load(fp)
-        if data:
-            for shudong in data:
-                full_text = shudong['tweet']['full_text']
-                lower_text = text.lower()
-                lower_full_text = full_text.lower()
-                if lower_text in lower_full_text:
-                    result.append(shudong['tweet'])
-    return result
+
+def search_in_new_shudong(keyword: str):
+    # 构建 OR 过滤字符串
+    # 语法格式为: "字段1.ilike.%关键词%, 字段2.ilike.%关键词%"
+    search_filter = f"content.ilike.%{keyword}%, new_ocr.ilike.%{keyword}%"
+    
+    try:
+        response = supabase.table('shudong') \
+            .select('*') \
+            .or_(search_filter) \
+            .order('createdAt', desc=True) \
+            .execute()
+            
+        return response.data
+    except Exception as e:
+        print(f"搜索失败: {e}")
+        return []
 
 
-def search_in_tweet(text):
-    result = []
-    with open('./tweet.js') as fp:
-        # fp as a string
-        data = fp.read()
-        tweets = json.loads(data[25:])
-        if tweets:
-            for tweet in tweets:
-                full_text = tweet['tweet']['full_text']
-                lower_text = text.lower()
-                lower_full_text = full_text.lower()
-                if text in lower_full_text:
-                    created_at = tweet['tweet']['created_at']
-                    createdAt = twitter_utc_time_to_local_time(created_at)
-                    tweet['tweet']['createdAt'] = createdAt
-                    result.append(tweet['tweet'])
-    return result
+
+# def search_in_new_shudong(keyword):
+#     try:
+#         # 使用 ilike 进行模糊匹配，% 是通配符
+#         response = supabase.table('shudong') \
+#             .select('id, content, createdAt') \
+#             .ilike('content', f'%{keyword}%') \
+#             .order('createdAt', descending=True) \
+#             .execute()
+        
+#         return response.data
+#     except Exception as e:
+#         print(f"搜索出错: {e}")
+#         return []
+
+
+# def search_in_shudong(text):
+#     result = []
+#     with open('./data.json', 'r', encoding='utf-8') as fp:
+#         data = json.load(fp)
+#         if data:
+#             for shudong in data:
+#                 full_text = shudong['tweet']['full_text']
+#                 lower_text = text.lower()
+#                 lower_full_text = full_text.lower()
+#                 if lower_text in lower_full_text:
+#                     result.append(shudong['tweet'])
+#     return result
+
+
+# def search_in_tweet(text):
+#     result = []
+#     with open('./tweet.js', 'r', encoding='utf-8') as fp:
+#         # fp as a string
+#         data = fp.read()
+#         tweets = json.loads(data[25:])
+#         if tweets:
+#             for tweet in tweets:
+#                 full_text = tweet['tweet']['full_text']
+#                 lower_text = text.lower()
+#                 lower_full_text = full_text.lower()
+#                 if text in lower_full_text:
+#                     created_at = tweet['tweet']['created_at']
+#                     createdAt = twitter_utc_time_to_local_time(created_at)
+#                     tweet['tweet']['createdAt'] = createdAt
+#                     result.append(tweet['tweet'])
+#     return result
 
 
 def search_in_markdown(text):
@@ -65,7 +105,7 @@ def search_in_markdown(text):
     for file in glob.glob("../**/*.md"):
         md_files.append(file)
     for file in md_files:
-        with open(file, 'r') as fp:
+        with open(file, 'r', encoding='utf-8') as fp:
             fp_str = fp.read()
             if text in fp_str.lower():
                 index = fp_str.find(text)
@@ -81,7 +121,7 @@ def search_in_text(text):
         text_files.append(file)
     print(text_files)
     for file in text_files:
-        with open(file, 'r') as fp:
+        with open(file, 'r', encoding='utf-8') as fp:
             fp_str = fp.read()
             if text in fp_str.lower():
                 index = fp_str.find(text)
@@ -94,7 +134,7 @@ def search_in_text(text):
 def search_weibo_contents(text):
     contents = []
     for path in glob.glob("../weibo-backup/weibo/*.html"):
-        with open(path, 'r') as f:
+        with open(path, 'r', encoding='utf-8') as f:
             content = f.read()
             if text not in content.lower():
                 continue
@@ -108,32 +148,34 @@ def search_weibo_contents(text):
 
 
 
-Shudong = leancloud.Object.extend('shudong')
+# Shudong = leancloud.Object.extend('shudong')
 
 
-def search_ocr(str):
-    query = Shudong.query
-    query.contains('new_ocr', str)
-    results = query.find()
-    # limit default 100
-    ocr_results = []
-    for r in results:
-        r_dict = {}
-        r_dict['full_text'] = r.get('content')
-        createdAt = r.get('createdAt')
-        createdAt_twitter_format = datetime_to_twitter_utc_time(createdAt)
-        r_dict['created_at'] = createdAt_twitter_format
-        r_dict['createdAt'] = createdAt
-        ocr_results.append(r_dict)
-    return ocr_results
+# def search_ocr(search_str):
+#     # Supabase 语法：.ilike() 表示不区分大小写的模糊查询
+#     # % 符号是 SQL 的通配符，表示匹配任意字符
+#     try:
+#         response = supabase.table('shudong').select('*').ilike('new_ocr', f'%{search_str}%').execute()
+#         results = response.data
+#         ocr_results = []
+#         for r in results:
+#             r_dict = {}
+#             r_dict['full_text'] = r.get('content')
+#             createdAt = r.get('createdAt')
+#             createdAt_twitter_format = datetime_to_twitter_utc_time(createdAt)
+#             r_dict['created_at'] = createdAt_twitter_format
+#             r_dict['createdAt'] = createdAt
+#             ocr_results.append(r_dict)
+#         return ocr_results
+#     except Exception as e:
+#         print(f"搜索失败: {e}")
+#         return []
 
 
 def search(text):
     result = []
-    result.extend(search_in_tweet(text))
-    result.extend(search_in_shudong(text))
-    result.extend(search_ocr(text))
-    return sorted(result, key=lambda shudong: datetime.strptime(shudong['created_at'], twitter_utc_time_format))
+    result.extend(search_in_new_shudong(text))
+    return result
 
 
 def search_blog(text):
@@ -163,43 +205,47 @@ def handle_img(string):
 
 
 async def search_text(update: Update, context: CallbackContext):
-    tweet_list = search(update.message.text.lower())
-    count = len(tweet_list)
-    reply_content = ''
-    reply_markup = None
-    if tweet_list:
-        for tweet in tweet_list:
-            reply_content = reply_content + f'{tweet["full_text"]}\n' + f'{tweet["createdAt"]}\n'
-    blog_list = search_blog(update.message.text)
+    try:
+        tweet_list = search(update.message.text.lower())
+        count = len(tweet_list)
+        reply_content = ''
+        reply_markup = None
+        if tweet_list:
+            for tweet in tweet_list:
+                reply_content = reply_content + format_tweet_to_beijing(tweet) + '\n'
+        blog_list = search_blog(update.message.text)
 
-    weibo_list = search_weibo_contents(update.message.text)
-    count += len(blog_list)
-    count += len(weibo_list)
-
-    if blog_list:
-        for blog in blog_list:
-            reply_content = reply_content + f'{blog}\n'
-    if weibo_list:
-        for weibo in weibo_list:
-            reply_content = reply_content + f'{weibo}\n'
-    if not reply_content:
-        reply_content = '没有找到相关内容'
-    else:
-        reply_content = '共计找到' + str(count) + '条搜索结果\n' + reply_content 
-    global TOTAL_SEARCH_REPLY
-    if len(reply_content) > 4096:
-        TOTAL_SEARCH_REPLY = reply_content
-        reply_content = reply_content[:4096]
-        keyboard = [
-            [
-            InlineKeyboardButton("下一页", callback_data="1"),
+        weibo_list = search_weibo_contents(update.message.text)
+        count += len(blog_list)
+        count += len(weibo_list)
+        if blog_list:
+            for blog in blog_list:
+                reply_content = reply_content + f'{blog}\n'
+        if weibo_list:
+            for weibo in weibo_list:
+                reply_content = reply_content + f'{weibo}\n'
+        if not reply_content:
+            reply_content = '没有找到相关内容'
+        else:
+            reply_content = '共计找到' + str(count) + '条搜索结果\n' + reply_content 
+        global TOTAL_SEARCH_REPLY
+        if len(reply_content) > 4096:
+            TOTAL_SEARCH_REPLY = reply_content
+            reply_content = reply_content[:4096]
+            keyboard = [
+                [
+                InlineKeyboardButton("下一页", callback_data="1"),
+                ]
             ]
-        ]
-        reply_markup = InlineKeyboardMarkup(keyboard)
-    else:
-        TOTAL_SEARCH_REPLY = ''
-    await update.message.reply_text(reply_content, reply_markup=reply_markup)
-    return ConversationHandler.END
+            reply_markup = InlineKeyboardMarkup(keyboard)
+        else:
+            TOTAL_SEARCH_REPLY = ''
+        await update.message.reply_text(reply_content, reply_markup=reply_markup)
+        return ConversationHandler.END
+    except Exception as e:
+        print(f"搜索失败: {e}")
+        await update.message.reply_text('搜索失败')
+        return ConversationHandler.END
 
 
 async def search_button(update: Update, context: CallbackContext) -> None:

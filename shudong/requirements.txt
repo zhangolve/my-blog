@@ -6,10 +6,11 @@ tornado>=6.1
 APScheduler==3.6.3
 pytz>=2018.6
 cachetools==4.2.2
-leancloud==2.9.10
 python-telegram-bot==20.1
 firebase_admin==5.2.0
 tenacity==8.0.1
 typing-extensions==4.0.1
 bs4==0.0.1
 feedparser==6.0.10
+supabase==2.6.0
+ python-dotenv==1.0.1

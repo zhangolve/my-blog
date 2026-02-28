@@ -27,13 +27,21 @@ from fire import upload_blob
 from search import search, search_button, search_text, could_search
 from pathlib import Path
 import tempfile
+from supabase import create_client, Client
+import uuid
+from dotenv import load_dotenv
 
-leancloud.init("rkX7RdhzjQ0DdnpkcffRn4TD-gzGzoHsz", "pbWq8UDhvWbRpjebqfhqj4pG")
 
-if os.environ.get('USER') == 'zhangolive':
-    Shudong = leancloud.Object.extend('shudong_test')
-else:
-    Shudong = leancloud.Object.extend('shudong')
+load_dotenv()
+supabase = create_client("https://zdppyeuzhfvilfumszao.supabase.co", os.getenv("SUPABASE_KEY"))
+
+
+# leancloud.init("rkX7RdhzjQ0DdnpkcffRn4TD-gzGzoHsz", "pbWq8UDhvWbRpjebqfhqj4pG")
+
+# if os.environ.get('USER') == 'zhangolive':
+#     Shudong = leancloud.Object.extend('shudong_test')
+# else:
+#     Shudong = leancloud.Object.extend('shudong')
 
 
 # Enable logging
@@ -59,11 +67,18 @@ def start(update: Update, context: CallbackContext) -> None:
 
 
 def write_single_shudong(text, photos=None):
-    shudong = Shudong()
-    shudong.set('content', text)
-    if photos:
-        shudong.set('photos', photos)
-    shudong.save()
+    data = {
+        "id": str(uuid.uuid4()), # 如果你的 id 是 text 类型且没有设置默认值，建议生成一个 UUID
+        "content": text, # 对应 jsonb 类型
+        "photos": photos if photos else None,
+    }
+    try:
+        response = supabase.table('shudong').insert(data).execute()
+        print("保存成功！")
+        return response.data
+    except Exception as e:
+        print(f"保存失败: {e}")
+        return None
 
 
 async def upload_single_photo(photo_file, id):
