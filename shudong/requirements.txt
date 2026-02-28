@@ -9,7 +9,6 @@ cachetools==4.2.2
 python-telegram-bot~=20.5
 firebase_admin==5.2.0
 tenacity==8.0.1
-typing-extensions==4.0.1
 bs4==0.0.1
 feedparser==6.0.10
 supabase==2.6.0
