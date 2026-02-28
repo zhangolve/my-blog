@@ -13,4 +13,3 @@ typing-extensions==4.0.1
 bs4==0.0.1
 feedparser==6.0.10
 supabase==2.6.0
- python-dotenv==1.0.1
