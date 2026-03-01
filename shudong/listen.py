@@ -31,7 +31,8 @@ from supabase import create_client, Client
 import uuid
 from dotenv import load_dotenv
 
-
+import pytz
+shanghai_tz = pytz.timezone('Asia/Shanghai')
 load_dotenv()
 supabase = create_client("https://zdppyeuzhfvilfumszao.supabase.co", os.getenv("SUPABASE_KEY"))
 
@@ -194,6 +195,7 @@ def main(token) -> None:
         .build()
     )
 
+    updater.job_queue.scheduler.configure(timezone=shanghai_tz)
     dispatcher = updater
 
     # on different commands - answer in Telegram
